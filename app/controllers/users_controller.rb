@@ -9,11 +9,6 @@ class UsersController < ApplicationController
 		if @user.save
 			redirect_to @user
 		end
-		# user = User.find_by(email: params[:name][:email])
-		# if user.authenticate(params[:name][:password])
-  #       session[:user_id] = user.id
-  #       redirect_to user
-  
 	end
 
 	def show

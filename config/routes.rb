@@ -1,7 +1,17 @@
 Halfgap::Application.routes.draw do
 
   resources :users
+<<<<<<< HEAD
   resources :authentications
+=======
+
+
+  namespace :api, defaults: {format: :json} do
+    resources :task_lists, only: [:index] do
+      resources :tasks, only: [:index, :create, :update, :destroy]
+    end
+  end
+>>>>>>> randy/angular_setup_and_chatroom
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

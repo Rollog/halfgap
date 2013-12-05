@@ -5,12 +5,12 @@ require 'spec_helper'
 # I want to create an account
 
 # Scenario 1: Success
-# When I add a species
-# and I add a color
-# and I click 'save'
+# When I create a user
+# and I add a name, email, password, & password confirmation
+# and I click 'Create Account'
 # Then the page should display the
-# color and species
-# and the animal is saved
+# name and email
+# and the user is saved
 
 feature "user creates account", js: true do
   
@@ -29,7 +29,6 @@ feature "user creates account", js: true do
 
       expect(page).to have_content 'Marc'
       expect(page).to have_content 'marc@me.com'
-      # expect(page).to have_content 'Animal created!'
 
       expect(User.first.name).to eql 'Marc'
     end
