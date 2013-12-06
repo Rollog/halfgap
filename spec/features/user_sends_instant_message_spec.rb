@@ -23,7 +23,7 @@ feature "user sends an instant message", js: true do
       fill_in 'user_name', with: 'Marc'
       fill_in 'message', with: 'hi there!'
 
-      click_button 'Send'
+      click_button 'send'
 
       # expect(page).to have_content 'Marc'
       expect(page).to have_content 'hi there!'
