@@ -50,6 +50,7 @@ group :development, :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'database_cleaner'
+  gem 'better_errors'
 end
 
 # Use ActiveModel has_secure_password
