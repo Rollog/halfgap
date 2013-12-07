@@ -1,0 +1,120 @@
+@import 'bootstrap';
+/*@import 'bootstrap-responsive';
+*/
+$maincolor: black;
+
+
+
+#map-canvas { 
+ 	height: 500px;
+ 	width: 500px;
+ 	margin: 20 auto;
+ 	position: absolute;
+ 	top: 175px;
+ 	left: -75px;
+ 	padding: 50px;
+ }
+
+.nav-tabs {
+	color: white;
+}
+
+@navbar-default-color {
+	color: red;
+}
+
+h3 {
+ 	color: white;
+}
+
+.navbar {
+	display: inline-block;
+	color: white;
+}
+
+.masthead {
+  display: inline-block;
+}
+
+.jumbotron {
+	position: absolute;
+	margin: 0 auto;
+	margin-left: 40%;
+}
+
+#newuser {
+	margin: 0 auto;
+	width: 400px;
+}
+
+#newrest {
+	margin: 0 auto;
+	width: 350px;	
+	position: relative;
+	margin-top: 50px;
+}
+
+#restlist {
+	margin: 0 auto;
+	width: 800px;	
+	position: relative;
+	margin-top: 50px;
+}
+
+#restlistbox {
+	margin: 0 auto;
+	width: 800px;
+	background-color: rgba(205, 45, 45, 0.9);
+	color: black;
+	border-radius: 20px;
+	position: absolute;
+	padding: 20px;
+}
+
+#newrestbox {
+	margin: 0 auto;
+	width: 350px;
+	background-color: rgba(205, 45, 45, 0.9);
+	color: black;
+	border-radius: 20px;
+	padding: 20px;
+	position: absolute;
+}
+
+li {
+	color: $maincolor;
+}
+
+/*body {
+	background: url(image-path('corks3a.png')) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}*/
+
+.row div {
+	border: 2px solid black;
+}
+
+.row {
+
+	color: $maincolor;
+}
+
+body {
+	background-color: $maincolor;
+	font-family: helvetica;
+}
+
+#container {
+	background-color: #eee;
+	width: 800px;
+	margin: 0 auto;
+}
+
+#indexcontainer {
+	margin: 0 auto;
+	background-color: black;
+}
+	
