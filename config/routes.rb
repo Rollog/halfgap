@@ -1,6 +1,6 @@
 Halfgap::Application.routes.draw do
 
-  root to: 'users#show'
+  root 'welcome#index'
 
   resources :friendships
   resources :users
