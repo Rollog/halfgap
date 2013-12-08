@@ -34,16 +34,9 @@ function initialize() {
 <br>
 <div id="newrest">
 	 <div id="newrestbox">
-	 	<ul>
-	 		<% for friendship in @user.friendships %>
-	 			<li>
-	    			<%=h @user.name %>
-	    			 <%= link_to "Add Friend", friendships_path(:friend_id => user), :method => :post %>
-	    		</li>
-			<% end %>
-		</ul>
-
-  <div id="map-canvas"/>
+      <%= @user.name %>
+      <%= @user.email %>
+    <div id="map-canvas"/>
   </div>
 </div>
 

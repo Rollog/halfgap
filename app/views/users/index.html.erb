@@ -1,2 +1,10 @@
-Marc
-marc@me.com
+<div id="users">
+	<ul>
+		<% @users.each do |u| %>
+			<li>
+				<%= u.name %>
+				<%= link_to "Add Friend", friendships_path(friend_id: u), method: :post %>
+			</li>
+		<% end %>
+	</ul>
+</div>

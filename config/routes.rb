@@ -2,6 +2,7 @@ Halfgap::Application.routes.draw do
 
   root to: 'users#show'
 
+  resources :friendships
   resources :users
   resources :authentications
 

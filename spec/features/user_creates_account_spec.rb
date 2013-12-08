@@ -25,12 +25,12 @@ feature "user creates account", js: true do
 
       click_button 'Create Account'
 
-      expect(current_path).to eql user_path(User.first)
+      expect(current_path).to eql user_path(User.last)
 
       expect(page).to have_content 'Marc'
       expect(page).to have_content 'marc@me.com'
 
-      expect(User.first.name).to eql 'Marc'
+      expect(User.last.name).to eql 'Marc'
     end
   end
 

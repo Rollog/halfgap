@@ -12,14 +12,17 @@ require 'spec_helper'
 # and the friendship is saved
 
 feature "user adds friend", js: true do
+  before :each do
+    User.create(name: 'Randy', password: 'caplin')
+  end
 
 	context "successfully" do
 		scenario "user adds friend" do
-			 visit(user_path(User.first))  #user_path
+			visit(users_path)  #users_path
 
 			expect(page).to have_content 'Randy'
 
-			click_button 'Add Friend'
+			click_link 'Add Friend'
 		end
 	end
 end
