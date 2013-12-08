@@ -12,12 +12,7 @@ gem 'pg'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 
-# furatto gem in for styling/templating
-group :assets do
-  gem 'compass-rails'
-end 
-
-gem 'furatto', git: 'git@github.com:IcaliaLabs/furatto-rails.git'
+gem 'foundation-rails'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'

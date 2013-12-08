@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Halfgap</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>HalfGap</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD32oFCWtStoFQ9JzajCXErEoGQNMWlIts&sensor=true">
+  <%= stylesheet_link_tag    "application" %>
+  <%= javascript_include_tag "vendor/modernizr" %>
    </script>
   <script src='//js.userbin.com?496622591868918'></script>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-	<%= render "layouts/navbar" %>
+  <%= render "layouts/navbar" %>
 
 <%= yield %>
-
+<%= javascript_include_tag "application" %>
 </body>
 </html>
