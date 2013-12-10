@@ -8,7 +8,7 @@
 
 
 User.create([
-	{name: 'Randy', lat: '34.088755', lon: '-118.276434', email: 'riplee@randy.com'}
+	{name: 'Randy', latitude: '34.088755', longitude: '-118.276434', email: 'riplee@randy.com'}
 	])
 
 	

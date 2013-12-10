@@ -1,7 +1,10 @@
 class UsersController < ApplicationController
+	respond_to :html, :json
 
 	def index
-		@users = User.all
+		# @users = User.all
+		@users = @user.nearbys(params[:radius])
+		respond_with @users
 	end
 
 	def new
@@ -16,8 +19,8 @@ class UsersController < ApplicationController
 	end
 
 	def show
-    	@user = User.find(params[:id])
-  	end
+    @user = User.find(params[:id])
+	end
 
 
 	private

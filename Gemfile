@@ -11,8 +11,10 @@ gem 'pg'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
-
 gem 'foundation-rails'
+
+# to use google maps a bit easier
+gem 'geocoder'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
