@@ -16,7 +16,7 @@
 //= require turbolinks
 //= require_tree .
 
-$(function(){ $(document).foundation(); });
+$(function(){ jQuery(document).foundation(); });
 
 // $('[data-action=cheat]').click(function(){
 // 	$.getJSON('/geocode/', {query: $('#address').val()}, map.cheat)
