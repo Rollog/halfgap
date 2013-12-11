@@ -18,6 +18,6 @@
 
 $(function(){ $(document).foundation(); });
 
-$('[data-action=cheat]').click(function(){
-	$.getJSON('/geocode/', {query: $('#address').val()}, map.cheat)
-});
+// $('[data-action=cheat]').click(function(){
+// 	$.getJSON('/geocode/', {query: $('#address').val()}, map.cheat)
+// });

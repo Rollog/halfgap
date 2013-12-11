@@ -1,11 +1,11 @@
 require 'bcrypt'
 
 class User < ActiveRecord::Base
-  attr_accessor :latitude, :longitude, :address, :name
+  # attr_accessor :latitude, :longitude, :address, :name
 
-  geocoded_by :address
-  reverse_geocoded_by :latitude, :longitude
-  after_validation :reverse_geocode
+  # geocoded_by :address
+  # reverse_geocoded_by :latitude, :longitude
+  # after_validation :reverse_geocode
 
   has_many :friendships
   has_many :friends, :through => :friendships

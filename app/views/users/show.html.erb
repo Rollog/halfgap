@@ -22,12 +22,67 @@
     </aside>
     <section class="main-section">
       <div class="page-container">
-        
+        <section id="map-wrapper">
+        <!-- Click the allow button to let the halfgap find your location. -->
+        <article></article>
+        <script>
+          $(function(){
+            function success(position) {
+              var mapcanvas = document.createElement('div');
+              mapcanvas.id = 'mapcontainer';
+              mapcanvas.style.height = '480px';
+              mapcanvas.style.width = '320px';
+
+              document.querySelector('article').appendChild(mapcanvas);
+
+              var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+              
+              var options = {
+                zoom: 15,
+                center: coords,
+                mapTypeControl: false,
+                navigationControlOptions: {
+                  style: google.maps.NavigationControlStyle.SMALL
+                },
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+              };
+              var map = new google.maps.Map(document.getElementById("mapcontainer"), options);
+
+              var marker = new google.maps.Marker({
+                  position: coords,
+                  animation: google.maps.Animation.DROP,
+                  map: map,
+                  title:"You are here!"
+              });
+              var center = map.getCenter();
+              // alert(center.lat());
+              // alert(center.lng());
+              var user_id = <%= @user.id.to_json %>
+              $.ajax({
+                url: user_id,
+                data: "latitude=" + center.lat() + "longitude=" + center.lng(),
+                type: "POST",
+                success: function(data) {
+                  console.log(data);
+                },
+                failure: function() {
+                  alert("Unsuccessful");
+                }
+              }); 
+            }
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(success);
+            } else {
+              error('Geo Location is not supported');
+            }
+          });
+        </script>
+        </section>
         <div class="greeting-div">
           Welcome <%= @user.name %>!
         </div>
         <div class="newrest">
-          <div id="map-container"></div
+          <div id="map-canvas"/>
         </div>
       </section>
       <!-- <footer class="bottom-menu"></footer> -->
