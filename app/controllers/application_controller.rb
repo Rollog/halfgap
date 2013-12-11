@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     if session[:user_id]
       @current_user ||= User.find_by(id: session[:user_id])
     elsif session[:user_id]
-      @current_user ||= Userbin.user.email
+      @current_user
     end
   end
 

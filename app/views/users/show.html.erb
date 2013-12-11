@@ -12,12 +12,12 @@
     <aside class="right-off-canvas-menu">
       <ul class="off-canvas-list">
         <li><label>Friends</label></li>
-        <% @user.friendships.each do |f| %>
-            <li>
-              <a href="#"><%=h f.friend.name %></a>
-              <%# link_to "remove", friendship_path(f.id), method: :delete %>
-            </li>
-          <% end %>
+        <% current_user.friendships.each do |f| %>
+          <li>
+            <%= link_to f.friend.name, friendship_path(f.id) %>
+            <%# link_to "remove", friendship_path(f.id), method: :delete %>
+          </li>
+        <% end %>
       </ul>
     </aside>
     <!-- all content in main-section gets pushed aside -->
@@ -26,13 +26,13 @@
         <section id="map-wrapper">
         <!-- Click the allow button to let the halfgap find your location. -->
         <article></article>
-        <script>
-          
+          <script>
+            
             function success(position) {
               var mapcanvas = document.createElement('div');
               mapcanvas.id = 'mapcontainer';
-              mapcanvas.style.height = '480px';
-              mapcanvas.style.width = '320px';
+              // mapcanvas.style.height = '480px';
+              // mapcanvas.style.width = '320px';
 
               document.querySelector('article').appendChild(mapcanvas);
 
@@ -81,20 +81,16 @@
             else {
               error('Geo Location is not supported');
             }
-          
-        </script>
+            
+          </script>
         </section>
         <div class="greeting-div">
-          Welcome <%= @user.name %>!
+          Welcome <%= current_user.name %>!
         </div>
-        <div class="newrest">
-          <div id="map-canvas"/>
-        </div>
-      </section>
-      <!-- <footer class="bottom-menu"></footer> -->
-      <nav class="navbar-fixed-bottom" role="navigation">
-      </nav>
-    </div>
-  <a class="exit-off-canvas"></a>
+        <!-- <footer class="bottom-menu"></footer> -->
+        <nav class="navbar-fixed-bottom" role="navigation"></nav>
+      </div>
+    </section>
+    <a class="exit-off-canvas"></a>
   </div>
 </div>

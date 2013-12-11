@@ -1,0 +1,46 @@
+<div class="off-canvas-wrap">
+  <div class="inner-wrap">
+    <nav class="tab-bar">
+      <section class="left tab-bar-section">
+        <h1 class="title">Half Gap</h1>
+      </section>
+      <section class="right-small">
+        <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
+      </section>
+    </nav>
+
+    <aside class="right-off-canvas-menu">
+      <ul class="off-canvas-list">
+        <li><label>Friends</label></li>
+        <% current_user.friendships.each do |f| %>
+          <li>
+            <%= link_to f.friend.name, friendship_path(f.id) %>
+            <%# link_to "remove", friendship_path(f.id), method: :delete %>
+          </li>
+        <% end %>
+      </ul>
+    </aside>
+    <!-- all content in main-section gets pushed aside -->
+    <section class="main-section">
+      <div class="page-container">
+        <h1><%= @friendship.friend.name %></h1>
+        <select id="meet_for">
+          <option value="1" selected="selected">Meet For:</option>
+          <option value="1">Coffee</option>
+          <option value="2">Alcohol</option>
+          <option value="3" >Bars</option>
+          <option value="4">Food</option>
+        </select>
+        <div id="or_type_here">
+          <%= text_field 'custom', nil, placeholder: "Or Type Here" %>
+        </div>
+
+        <%= submit_tag "Meet Up!" %>
+        
+        <!-- <footer class="bottom-menu"></footer> -->
+        <nav class="navbar-fixed-bottom" role="navigation"></nav>
+      </div>
+    </section>
+    <a class="exit-off-canvas"></a>
+  </div>
+</div>

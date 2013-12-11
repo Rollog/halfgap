@@ -29,39 +29,22 @@ body {
 	z-index: 0;
 }
 
-#map-canvas { 
- 	height: 500px;
- 	width: 320px;
- 	margin: 20px auto;
- 	position: absolute;
- 	top: 175px;
- 	left: -75px;
- 	padding: 50px;	
-}
-
-#newrest {
-	margin: 0 auto;
-	width: 350px;	
-	position: relative;
-	margin-top: 50px;
-
-}
-
-#restlist {
-	margin: 0 auto;
-	width: 800px;	
-	position: relative;
-	margin-top: 50px;
-}
-
-#newrestbox {
-	margin: 0 auto;
-	width: 350px;
-	background-color: rgba(205, 45, 45, 0.9);
-	color: black;
-	border-radius: 20px;
-	padding: 20px;
-	position: absolute;
+#mapcontainer {
+   width: 320px; 
+   height: 480px; 
+   /* Rotate */
+   -webkit-transform: rotate(-45deg);
+   -moz-transform: rotate(-45deg);
+   -ms-transform: rotate(-45deg);
+   -o-transform: rotate(-45deg);
+   transform: rotate(-45deg);
+   /* Rotate Origin */
+   -webkit-transform-origin: 0 100%;
+   -moz-transform-origin: 0 100%;
+   -ms-transform-origin: 0 100%;
+   -o-transform-origin: 0 100%;
+   transform-origin: 0 100%;
+   border-radius: 10px;
 }
 
 .navbar-fixed-bottom {
