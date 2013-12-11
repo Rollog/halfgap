@@ -5,6 +5,7 @@ Halfgap::Application.routes.draw do
   
   post "users/current_location/:id" => "users#current_location"
   get "users/current_location/:id" => "users#current_location"
+  
   resources :friendships
   resources :users
   resources :authentications

@@ -20,6 +20,7 @@
           <% end %>
       </ul>
     </aside>
+    <!-- all content in main-section gets pushed aside -->
     <section class="main-section">
       <div class="page-container">
         <section id="map-wrapper">
@@ -54,9 +55,12 @@
                   map: map,
                   title:"You are here!"
               });
+              // geolocates user
               $(function(){
                 var center = map.getCenter();
-                var user_id = <%= @user.id.to_s %>
+                // user_id will make user id dynamic to current_user
+                var user_id = <%= @user.id.to_json %>
+                // posts lat and lng to server
                   $.ajax({
                     url: "/users/current_location/" + user_id,
                     data: { latitude: center.lat(), longitude: center.lng() },
@@ -73,7 +77,8 @@
             }
             if (navigator.geolocation) {
               navigator.geolocation.getCurrentPosition(success);
-            } else {
+            } 
+            else {
               error('Geo Location is not supported');
             }
           

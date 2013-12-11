@@ -3,8 +3,6 @@ class UsersController < ApplicationController
 
 	def index
 		@users = User.all
-		# @users = @user.nearbys(params[:radius])
-		# respond_with @users
 	end
 
 	def new
@@ -36,7 +34,7 @@ class UsersController < ApplicationController
 		@user = User.find(params[:id])
 		lat = params[:latitude]
 	  lng = params[:longitude]
-	  # user updates latitude and longitude everytime user is on show page
+	  # user updates latitude and longitude everytime user is on the show.html page
 		if @user.update(latitude: lat, longitude: lng)
 		  render json: {latitude: lat, longitude: lng}
 		else
