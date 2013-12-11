@@ -1,4 +1,4 @@
-$(document).ready(function(event){
+$(document).ready(function(){
 	// event.preventDefault();
 	// $('#mapcontainer').on("load", function(){
 	// 	$.post('/user/' + )		

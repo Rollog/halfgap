@@ -26,7 +26,7 @@
         <!-- Click the allow button to let the halfgap find your location. -->
         <article></article>
         <script>
-          $(function(){
+          
             function success(position) {
               var mapcanvas = document.createElement('div');
               mapcanvas.id = 'mapcontainer';
@@ -54,28 +54,29 @@
                   map: map,
                   title:"You are here!"
               });
-              var center = map.getCenter();
-              // alert(center.lat());
-              // alert(center.lng());
-              var user_id = <%= @user.id.to_json %>
-              $.ajax({
-                url: '/users/store_location/' + user_id,
-                data: { latitude : center.lat(), longitude: center.lng() },
-                type: "GET",
-                success: function(data) {
-                  console.log(data);
-                },
-                failure: function() {
-                  alert("Unsuccessful");
-                }
-              }); 
+              $(function(){
+                var center = map.getCenter();
+                var user_id = <%= @user.id.to_s %>
+                  $.ajax({
+                    url: "/users/current_location/" + user_id,
+                    data: { latitude: center.lat(), longitude: center.lng() },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                      console.log(data);
+                    },
+                    failure: function() {
+                      alert("Unsuccessful");
+                    }
+                  });
+              });
             }
             if (navigator.geolocation) {
               navigator.geolocation.getCurrentPosition(success);
             } else {
               error('Geo Location is not supported');
             }
-          });
+          
         </script>
         </section>
         <div class="greeting-div">

@@ -22,54 +22,33 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
 
     respond_to do |format|
-	    format.html  # index.html.erb
+	    format.html
 	    format.json  { render :json => @user }
 	  end
-	  
-	end
-
-	def edit
-		
 	end
 
 	def update
-		# @user = User.find(params[:id])
-		# @user.update(user_params)
-
-		# respond_to do |fmt|
-		#   fmt.html
-		#   fmt.json {
-		# 	  lat = params[:latitude]
-		# 	  lng = params[:longitude]
-		# 	  render json: {latitude: lat, longitude: lat}
-		#   }
-	 #  end
+		@user = User.find(params[:id])
+		
 	end
 
-	def store_location
+	def current_location
 		@user = User.find(params[:id])
-		if @user.update(params[:user])
-			lat = params[:latitude]
-		  lng = params[:longitude]
+		lat = params[:latitude]
+	  lng = params[:longitude]
+	  # user updates latitude and longitude everytime user is on show page
+		if @user.update(latitude: lat, longitude: lng)
 		  render json: {latitude: lat, longitude: lng}
 		else
 			puts "FAILEDDD"
 		end
-		
-	  
-	  end
-
-	#   current_user.latitude = params[:latitude]
-	#   current_user.longitude = params[:longitude]
-	#   current_user.save
-
-	# end
+  end
 
 
 	private
 
 	def user_params
-		params.require(:user).permit(:name, :email, :password, :confirm_password, :latitude, :longitude)
+		params.require(:user).permit(:name, :email, :password, :confirm_password)
 	end
 
 end
