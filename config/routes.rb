@@ -1,7 +1,7 @@
 Halfgap::Application.routes.draw do
 
   root 'welcome#index'
-  post "users/store_location/:id" => "users#store_location"
+  get "users/store_location/:id" => "users#store_location"
   resources :friendships
   resources :users
   resources :authentications
