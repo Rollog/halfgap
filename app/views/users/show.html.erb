@@ -59,9 +59,9 @@
               // alert(center.lng());
               var user_id = <%= @user.id.to_json %>
               $.ajax({
-                url: user_id,
-                data: "latitude=" + center.lat() + "longitude=" + center.lng(),
-                type: "POST",
+                url: '/users/store_location/' + user_id,
+                data: { latitude : center.lat(), longitude: center.lng() },
+                type: "GET",
                 success: function(data) {
                   console.log(data);
                 },

@@ -2,9 +2,9 @@ class UsersController < ApplicationController
 	respond_to :html, :json
 
 	def index
-		# @users = User.all
-		@users = @user.nearbys(params[:radius])
-		respond_with @users
+		@users = User.all
+		# @users = @user.nearbys(params[:radius])
+		# respond_with @users
 	end
 
 	def new
@@ -28,22 +28,36 @@ class UsersController < ApplicationController
 	  
 	end
 
-	def update
-		@user = User.find(params[:id])
-		if @user.update(user_params)
-		end
+	def edit
+		
 	end
 
-	# def store_location
-	# 	@user = current_user
-	# 	respond_to do |fmt|
-	# 	  fmt.html
-	# 	  fmt.json {
-	# 		  lat = params[:latitude]
-	# 		  lng = params[:longitude]
-	# 		  render json: {latitude: lat, longitude: lat}
-	# 	  }
-	#   end
+	def update
+		# @user = User.find(params[:id])
+		# @user.update(user_params)
+
+		# respond_to do |fmt|
+		#   fmt.html
+		#   fmt.json {
+		# 	  lat = params[:latitude]
+		# 	  lng = params[:longitude]
+		# 	  render json: {latitude: lat, longitude: lat}
+		#   }
+	 #  end
+	end
+
+	def store_location
+		@user = User.find(params[:id])
+		if @user.update(params[:user])
+			lat = params[:latitude]
+		  lng = params[:longitude]
+		  render json: {latitude: lat, longitude: lng}
+		else
+			puts "FAILEDDD"
+		end
+		
+	  
+	  end
 
 	#   current_user.latitude = params[:latitude]
 	#   current_user.longitude = params[:longitude]
