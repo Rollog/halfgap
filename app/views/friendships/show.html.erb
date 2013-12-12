@@ -23,7 +23,9 @@
     <!-- all content in main-section gets pushed aside -->
     <section class="main-section">
       <div class="page-container">
-        <h1><%= @friendship.friend.name %></h1>
+        <%= @friendship.each do |f| %><h1><%= f.name %></h1>
+
+        <% end %>
         <select id="meet_for">
           <option value="1" selected="selected">Meet For:</option>
           <option value="1">Coffee</option>

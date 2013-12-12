@@ -11,7 +11,7 @@ class FriendshipsController < ApplicationController
   end
 
   def show
-    @friendship = current_user.friendships.find(params[:id])
+    @friendship = current_user.friends
   end
 
   def destroy
