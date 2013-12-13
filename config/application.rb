@@ -11,9 +11,6 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env)
 
- # # Add the fonts path
- #  config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
-
 module Halfgap
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
