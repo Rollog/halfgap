@@ -10,6 +10,10 @@ Halfgap::Application.routes.draw do
   resources :friendships
   resources :authentications
 
+  match '/login', to: 'authentications#new', via: 'get'
+  match '/logout', to: 'authentications#destroy', via: 'delete'
+
+
   # post '/users/:id' => 'users#update'
 
   # The priority is based upon order of creation: first created -> highest priority.

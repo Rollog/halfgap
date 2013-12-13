@@ -5,6 +5,7 @@
         <h1 class="title">Half Gap</h1>
       </section>
       <section class="right-small">
+        
         <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
       </section>
     </nav>
@@ -138,10 +139,7 @@
         <div class="greeting-div">
           Welcome <%= current_user.name %>!
         </div>
-
-                 
-
-        <input type="submit" />
+        <%= link_to "Sign Out", logout_path, method: "delete" %>
         <!-- <footer class="bottom-menu"></footer> -->
         <nav class="navbar-fixed-bottom" role="navigation"></nav>
       </div>
