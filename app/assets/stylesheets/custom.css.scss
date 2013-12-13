@@ -1,9 +1,59 @@
 @import 'bootstrap';
 
+@font-face {
+  font-family: HelveticaNeue;
+  src: url("/assets/HelveticaNeueLTStd-Lt.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+html, body {
+	height: 100%;
+}
+
+
 body {
 	margin: 0;
 	font-family: HelveticaNeue !important;
-	background-color: #eae66e;
+}
+
+.home_container {
+	min-width: 320px;
+	max-width: 500px;
+	height: 100%;
+	margin: 0 auto;
+	background: #9decff;
+}
+
+.auth_container {
+	min-width: 320px;
+	position: fixed;
+	left: 50%;
+	bottom: 0;
+	text-align: center;
+	margin-left: -160px;
+	background: #eae66e;
+
+}
+
+.home_links {
+	text-align: center;
+	height: 70px;
+	line-height: 80px;
+	font-size: 30px;
+	font-weight: bold;
+}
+
+#login {
+	text-decoration: none;
+	color: white;
+}
+
+#signup {
+	text-decoration: none;
+	color: #eae66e;
+	background-image: asset-url("dark_wall.png");
+	height: 70px;
 }
 
 .tab-bar {
@@ -46,6 +96,8 @@ body {
    transform-origin: 0 100%;
    border-radius: 10px;
 }
+
+
 
 .navbar-fixed-bottom {
 	width: 100%;

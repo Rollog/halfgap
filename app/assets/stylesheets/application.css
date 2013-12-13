@@ -13,12 +13,7 @@
  *= require_tree .
  */
 
-@font-face {
-	font-family: HelveticaNeue;
-	src: asset-url('HelveticaNeueLTStd-Lt.otf'),
-}
-
-@font-face {
+/*@font-face {
   font-family: '[set]Foundicons';
   src: url('fonts/[set]_foundicons.eot');
   src: url('fonts/[set]_foundicons.eot?#iefix') format('embedded-opentype'),
@@ -45,5 +40,5 @@
   font-weight: normal;
   font-style: normal;
   text-decoration: inherit;
-}
+}*/
 
