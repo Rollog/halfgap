@@ -30,10 +30,11 @@ class UsersController < ApplicationController
 	end
 
 	def current_location
+		@user = User.find(params[:id])
 		lat = params[:latitude]
 	  lng = params[:longitude]
 	  # user needs to be logged in to update location everytime user is on the show.html page
-		if current_user.update(latitude: lat, longitude: lng)
+		if @user.update(latitude: lat, longitude: lng)
 		  render json: {latitude: lat, longitude: lng}
 		else
 			puts "FAILEDDD"
