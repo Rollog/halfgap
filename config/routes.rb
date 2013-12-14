@@ -9,6 +9,7 @@ Halfgap::Application.routes.draw do
   resources :users
   resources :friendships
   resources :authentications
+  resources :meet_requests
 
   match '/login', to: 'authentications#new', via: 'get'
   match '/logout', to: 'authentications#destroy', via: 'delete'

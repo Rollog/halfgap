@@ -4,8 +4,12 @@ class User < ActiveRecord::Base
 
   has_many :friendships
   has_many :friends, through: :friendships
-  # has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
-  # has_many :inverse_friends, through: :inverse_friendships, source: :user
+  has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
+  has_many :inverse_friends, through: :inverse_friendships, source: :user
+
+  has_many :sent_requests, class_name: "MeetRequest", foreign_key: "sender_id"
+  has_many :received_requests, class_name: "MeetRequest", foreign_key: "receiver_id"
+  has_many :recipients, through: :sent_requests, source: :receiver
 
 	before_save :hash_password
 

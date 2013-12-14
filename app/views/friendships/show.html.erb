@@ -23,20 +23,10 @@
     <!-- all content in main-section gets pushed aside -->
     <section class="main-section">
       <div class="page-container">
-        <h1><% @user.friendship.friend.name %></h1>
-        <select id="meet_for">
-          <option value="1" selected="selected">Meet For:</option>
-          <option value="1">Coffee</option>
-          <option value="2">Alcohol</option>
-          <option value="3" >Bars</option>
-          <option value="4">Food</option>
-        </select>
-        <div id="or_type_here">
-          <%= text_field 'custom', nil, placeholder: "Or Type Here" %>
-        </div>
+        <h1><%= @friendship.name %></h1>
 
-        <%= submit_tag "Meet Up!" %>
- 
+        
+
         <!-- <footer class="bottom-menu"></footer> -->
         <nav class="navbar-fixed-bottom" role="navigation"></nav>
       </div>
@@ -44,3 +34,18 @@
     <a class="exit-off-canvas"></a>
   </div>
 </div>
+
+<script>
+  
+  var friendship_id = <% @friendship.id.to_json %>
+
+  $(function(){
+    $('#meet_up_btn').on('click', function(){
+      $.post('/friendships/request_meetup' + friendship_id,
+      {
+        
+      })
+    });
+  });
+  
+</script>

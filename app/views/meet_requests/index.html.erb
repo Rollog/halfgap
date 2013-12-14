@@ -1,0 +1,4 @@
+<% current_user.received_requests.each do |r| %>
+	<%= r.option %>
+	<%= r.message %>
+<% end %>
