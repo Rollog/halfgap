@@ -25,6 +25,21 @@
       <div class="page-container">
         <h1><%= @friendship.name %></h1>
 
+        <form> 
+          <select id="meet_for">
+            <option value="1" selected="selected" disabled="disabled">Meet For:</option>
+            <option value="1">Coffee</option>
+            <option value="2">Alcohol</option>
+            <option value="3" >Bars</option>
+            <option value="4">Food</option>
+          </select>
+          <div id="or_type_here">
+            <%= text_field 'custom', nil, placeholder: "Or Type Here" %>
+          </div>
+
+          <input type="submit" value="Meet Up!" id="meetUpButton">  
+        </form>      
+
         
 
         <!-- <footer class="bottom-menu"></footer> -->
