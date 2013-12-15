@@ -1,7 +1,7 @@
 class MeetRequestsController < ApplicationController
 	
 	def index
-		@meet_requests = current_user.received_requests.all
+		@meet_requests = current_user.received_requests
 	end
 
 	# def new
@@ -24,7 +24,7 @@ class MeetRequestsController < ApplicationController
 	def create
 		@friendship = current_user.friendships.find_by(params[:id])
 		@friend = current_user.friends.find_by(params[:id])
-		@meet_request = current_user.sent_requests.new
+		@meet_request = current_user.sent_requests.new(meet_requests_params)
 		@meet_request.receiver_id = @friend.id
 		if @meet_request.save
 			flash[:notice] = "Request Sent!"
@@ -38,7 +38,7 @@ class MeetRequestsController < ApplicationController
 	private
 
 	def meet_requests_params
-		params[:meet_request]
+		params.require(:meet_request).permit(:option, :message, confirm_meetup: false)
 	end
 
 end
