@@ -1,4 +1,5 @@
-<% current_user.received_requests.each do |r| %>
+<% @meet_requests.each do |r| %>
+	<%= r.id %>
 	<%= r.option %>
 	<%= r.message %>
 <% end %>

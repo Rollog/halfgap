@@ -6,10 +6,10 @@ Halfgap::Application.routes.draw do
   post "users/current_location/:id" => "users#current_location"
   get "users/current_location/:id" => "users#current_location"
   
-  resources :users
+  resources :users 
   resources :friendships
-  resources :authentications
   resources :meet_requests
+  resources :authentications
 
   match '/login', to: 'authentications#new', via: 'get'
   match '/logout', to: 'authentications#destroy', via: 'delete'
