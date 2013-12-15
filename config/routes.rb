@@ -1,5 +1,7 @@
 Halfgap::Application.routes.draw do
 
+  resources :locations
+
   root 'welcome#index'
   
   
