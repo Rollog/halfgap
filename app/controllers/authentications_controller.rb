@@ -31,4 +31,5 @@ class AuthenticationsController < ApplicationController
     redirect_to authentications_url,
      notice: "You signed out."
   end
+  
 end

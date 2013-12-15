@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20131215032958) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "option"
-    t.boolean  "confirm_meetup"
+    t.boolean  "meetup_confirmation", default: false
   end
 
   create_table "users", force: true do |t|
