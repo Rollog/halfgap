@@ -50,6 +50,11 @@ group :development, :test do
   gem 'better_errors'
 end
 
+group :production do
+  gem 'rails_12factor'
+  gem 'thin'
+end
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 
