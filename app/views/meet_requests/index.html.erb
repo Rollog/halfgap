@@ -2,7 +2,7 @@
 	<%= r.option %>
 	<%= r.message %>
 	<!-- <input type="button" id="confim_meet_link" value="confirm request"> -->
-	<%= link_to "confirm meet up", confirm_meetup_path(r.id), method: :post %><br>
+	<%= link_to "confirm meet up", confirm_meetup_path(r.id), method: :patch %><br>
 <% end %>
 
 <script>

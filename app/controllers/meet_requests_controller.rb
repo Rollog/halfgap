@@ -17,15 +17,14 @@ class MeetRequestsController < ApplicationController
 
  	def new
  		@meet_request = current_user.sent_requests.new
- 		@meet_request.sender_id = current_user.id
-		@meet_request.receiver_id = @friend.id
+ 		@friend = current_user.friends.find_by(params[:id])
  	end
 
 	def create
-		@friendship = current_user.friendships.find_by(params[:id])
 		@friend = current_user.friends.find_by(params[:id])
 
 		@meet_request = current_user.sent_requests.new(meet_requests_params)
+		# to make sure we are sending storing to whom the req is being sent
 		@meet_request.receiver_id = @friend.id
 		if @meet_request.save
 			flash[:notice] = "Request Sent!"
@@ -37,14 +36,9 @@ class MeetRequestsController < ApplicationController
 	end
 
 	def confirm_meetup
-		# meet_conf = params[:meetup_confirmation]
-		@user = current_user.received_requests.find(params[:id])
-		@friend = MeetRequest.find_by_sender_id(params[:sender_id])
-		if MeetRequest.confirm_meetup(@user, @friend)
-			flash[:notice] = "Confirmed request!"
-			redirect_to :back
-		end
-		# render json: { meetup_confirmation: meet_conf }
+		@received_request = current_user.received_requests.find_by(params[:receiver_id])
+		@received_request.update_attributes(meetup_confirmation: true)
+		redirect_to :back
 	end
 
 	private
