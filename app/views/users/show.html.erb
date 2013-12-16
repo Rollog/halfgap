@@ -84,7 +84,6 @@
 
                     <% @user.friends.each do |f| %>
                       friendsCoords.push(new google.maps.LatLng(<%= f.latitude %>,<%= f.longitude %>));
-
                     <% end %>
 
                     var i, newMarker;

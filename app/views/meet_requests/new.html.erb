@@ -1,1 +1,83 @@
-<%= render "form" %>
+<div class="off-canvas-wrap">
+  <div class="inner-wrap">
+    <nav class="tab-bar">
+      <section class="left tab-bar-section">
+        <h1 class="title">Half Gap</h1>
+      </section>
+      <section class="right-small">
+        <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
+      </section>
+    </nav>
+
+    <aside class="right-off-canvas-menu">
+      <ul class="off-canvas-list">
+        <li><label>Friends</label></li>
+        <% current_user.friendships.each do |f| %>
+          <li>
+            <%= link_to f.friend.name, friendship_path(f.id) %>
+            <%# link_to "remove", friendship_path(f.id), method: :delete %>
+          </li>
+        <% end %>
+      </ul>
+    </aside>
+    <!-- all content in main-section gets pushed aside -->
+    <section class="main-section">
+      <div class="page-container">
+        <h1><%= @friendship.name %></h1>
+
+        <!-- <form id="meetUpForm"> 
+          <select id="meet_for">
+            <option value="1" selected="selected" disabled="disabled">Meet For:</option>
+            <option value="1">Coffee</option>
+            <option value="2">Alcohol</option>
+            <option value="3" >Bars</option>
+            <option value="4">Food</option>
+          </select>
+          <input type="text" id="or_type_here">
+          <input type="submit" value="Meet Up!" id="meetUpButton">  
+        </form>  -->  
+
+        <%= render "meet_requests/form" %>   
+
+        
+
+        <!-- <footer class="bottom-menu"></footer> -->
+        <nav class="navbar-fixed-bottom" role="navigation"></nav>
+      </div>
+    </section>
+    <a class="exit-off-canvas"></a>
+  </div>
+</div>
+
+<script>
+
+  var friendship_id = <%= @friendship.id.to_json %>
+
+  $("#meetUpForm").on('submit', function(event) {
+    event.preventDefault();
+
+    var formData = $(this).serialize();
+
+    $.ajax({
+      url: "/friendships/" + friendship_id + "/meet_requests",
+      type: "POST",
+      data: {option: $('#meet_for').val(), message: $('#or_type_here').text()},
+      success: function (data) {
+        console.log(data);
+        }
+      });
+    }
+  );
+  
+
+  // $(function(){
+  //  $('#meetUpButton').on('click', function(event){
+  //    event.preventDefault();
+  //    $.post('meet_request/new',
+  //    {
+        
+  //    })
+  //  });
+  // });
+  
+</script>

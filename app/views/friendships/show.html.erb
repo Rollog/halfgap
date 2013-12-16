@@ -23,9 +23,9 @@
     <!-- all content in main-section gets pushed aside -->
     <section class="main-section">
       <div class="page-container">
-        <h1><%= @friendship.name %></h1>
+        <h1><%= @friendship.friend.name %></h1>
 
-        <form> 
+        <!-- <form id="meetUpForm"> 
           <select id="meet_for">
             <option value="1" selected="selected" disabled="disabled">Meet For:</option>
             <option value="1">Coffee</option>
@@ -33,12 +33,11 @@
             <option value="3" >Bars</option>
             <option value="4">Food</option>
           </select>
-          <div id="or_type_here">
-            <%= text_field 'custom', nil, placeholder: "Or Type Here" %>
-          </div>
-
+          <input type="text" id="or_type_here">
           <input type="submit" value="Meet Up!" id="meetUpButton">  
-        </form>      
+        </form>  -->  
+
+        <%= render "meet_requests/form" %>   
 
         
 
@@ -51,16 +50,34 @@
 </div>
 
 <script>
-  
-  var friendship_id = <% @friendship.id.to_json %>
 
-  $(function(){
-    $('#meet_up_btn').on('click', function(){
-      $.post('/friendships/request_meetup' + friendship_id,
-      {
+  var friendship_id = <%= @friendship.id.to_json %>
+
+  $("#meetUpForm").on('submit', function(event) {
+    event.preventDefault();
+
+    var formData = $(this).serialize();
+
+    $.ajax({
+      url: "/friendships/" + friendship_id + "/meet_requests",
+      type: "POST",
+      data: {option: $('#meet_for').val(), message: $('#or_type_here').text()},
+      success: function (data) {
+        console.log(data);
+        }
+      });
+    }
+  );
+  
+
+  // $(function(){
+  //  $('#meetUpButton').on('click', function(event){
+  //    event.preventDefault();
+  //    $.post('meet_request/new',
+  //    {
         
-      })
-    });
-  });
+  //    })
+  //  });
+  // });
   
 </script>

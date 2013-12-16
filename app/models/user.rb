@@ -2,6 +2,9 @@ require 'bcrypt'
 
 class User < ActiveRecord::Base
 
+  # stores password, but then forgets it
+  attr_accessor :password, :password_confirmation
+
   has_many :friendships
   has_many :friends, through: :friendships
   has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
