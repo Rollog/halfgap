@@ -9,7 +9,7 @@ class MeetRequestsController < ApplicationController
  	end
 
 	def create
-		@friend = current_user.friends.find_by(params[:id])
+		@friend = current_user.friends.find_by(params[:friend_id])
 		@meet_request = current_user.sent_requests.new(meet_requests_params)
 		# to make sure we are sending storing to whom the req is being sent
 		@meet_request.receiver_id = @friend.id
@@ -31,11 +31,14 @@ class MeetRequestsController < ApplicationController
 	end
 
 	def show
-		@friend = current_user.friends.find_by(params[:id])
+		# @friend = current_user.friends.find(params[:id])
 		# once a user confirms a request user is taken to map route
 		@received_request = current_user.received_requests.find_by(params[:receiver_id])
-		@received_request.sender_id = @friend.id
-		flash[:error] = "Meet request not confirmed!"
+		@friend = @received_request.sender
+
+		
+		# 	flash[:error] = "Meet request not confirmed!"
+		# end
 	end
 
 	private

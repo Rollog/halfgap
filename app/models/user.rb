@@ -11,8 +11,10 @@ class User < ActiveRecord::Base
   has_many :inverse_friends, through: :inverse_friendships, source: :user
 
   has_many :sent_requests, class_name: "MeetRequest", foreign_key: "sender_id"
-  has_many :received_requests, class_name: "MeetRequest", foreign_key: "receiver_id"
   has_many :recipients, through: :sent_requests, source: :receiver
+  has_many :received_requests, class_name: "MeetRequest", foreign_key: "receiver_id"
+  has_many :requestors, through: :received_requests, source: :sender
+  
 
 	before_save :hash_password
 
