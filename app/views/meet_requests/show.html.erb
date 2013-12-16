@@ -1,3 +1,32 @@
+<div class="off-canvas-wrap">
+  <div class="inner-wrap">
+    <nav class="tab-bar">
+      <section class="left tab-bar-section">
+        <h1 class="title">Half Gap</h1>
+      </section>
+      <section class="right-small">
+        
+        <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
+      </section>
+    </nav>
+
+    <aside class="right-off-canvas-menu">
+      <ul class="off-canvas-list">
+        <li><label>Friends</label></li>
+        <% current_user.friendships.each do |f| %>
+          <li>
+            <%= link_to f.friend.name, friendship_path(f.id) %>
+            <%# link_to "remove", friendship_path(f.id), method: :delete %>
+          </li>
+        <% end %>
+      </ul>
+    </aside>
+    <!-- all content in main-section gets pushed aside -->
+    <section class="main-section">
+      <div class="page-container">
+        <section id="map-wrapper">
+        <!-- Click the allow button to let the halfgap find your location. -->
+        <article></article>
 <script>
   var map;
 
@@ -28,13 +57,13 @@
           position: coords,
           animation: google.maps.Animation.DROP,
           map: map,
-          title: "<%= @user.name %>, <%= @user.updated_at %>"
+          title: "<%= current_user.name %>, <%= current_user.updated_at %>"
       });
       // stores geolocation of user
       $(function(){
         var center = map.getCenter();
         // user_id will make user id dynamic to current_user
-        var user_id = <%= @user.id.to_json %>
+        var user_id = <%= current_user.id.to_json %>
         // posts lat and lng to server
           $.ajax({
             url: "/users/current_location/" + user_id,
@@ -55,7 +84,7 @@
         var directionsService = new google.maps.DirectionsService();
         var directionsRequest = {
             origin: center,
-            destination: "Santa Ana, CA",
+            destination: friendLocation,
             travelMode: google.maps.DirectionsTravelMode.DRIVING,
             unitSystem: google.maps.UnitSystem.METRIC
         };
@@ -86,3 +115,13 @@
   google.maps.event.addDomListener(window, "load", initialize);
 
 </script>
+        </section>
+        
+        <%= link_to "Sign Out", logout_path, method: "delete" %>
+        <!-- <footer class="bottom-menu"></footer> -->
+        <nav class="navbar-fixed-bottom" role="navigation"></nav>
+      </div>
+    </section>
+    <a class="exit-off-canvas"></a>
+  </div>
+</div>
