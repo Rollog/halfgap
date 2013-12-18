@@ -1,123 +1,90 @@
-<div class="off-canvas-wrap">
-  <div class="inner-wrap">
-    <nav class="tab-bar">
-      <section class="left tab-bar-section">
-        <h1 class="title">Half Gap</h1>
-      </section>
-      <section class="right-small">
-        
-        <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
-      </section>
-    </nav>
+<% content_for :content do %>
+  <section id="map-wrapper">
+  <!-- Click the allow button to let the halfgap find your location. -->
+  <article></article>
+    <script>
+      var map;
 
-    <aside class="right-off-canvas-menu">
-      <ul class="off-canvas-list">
-        <li><label>Friends</label></li>
-        <% current_user.friendships.each do |f| %>
-          <li>
-            <%= link_to f.friend.name, friendship_path(f.id) %>
-            <%# link_to "remove", friendship_path(f.id), method: :delete %>
-          </li>
-        <% end %>
-      </ul>
-    </aside>
-    <!-- all content in main-section gets pushed aside -->
-    <section class="main-section">
-      <div class="page-container">
-        <section id="map-wrapper">
-        <!-- Click the allow button to let the halfgap find your location. -->
-        <article></article>
-          <script>
-            var map;
+      function initialize(){
 
-            function initialize(){
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+          var mapcanvas = document.createElement('div');
+          mapcanvas.id = 'mapcontainer';
+          // mapcanvas.style.height = '480px';
+          // mapcanvas.style.width = '320px';
 
-              if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                var mapcanvas = document.createElement('div');
-                mapcanvas.id = 'mapcontainer';
-                // mapcanvas.style.height = '480px';
-                // mapcanvas.style.width = '320px';
+          document.querySelector('article').appendChild(mapcanvas);
 
-                document.querySelector('article').appendChild(mapcanvas);
+          var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          
+          var options = {
+            zoom: 10,
+            mapTypeControl: false,
+            center: coords,
+            navigationControlOptions: {
+              style: google.maps.NavigationControlStyle.SMALL
+            },
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
 
-                var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                
-                var options = {
-                  zoom: 8,
-                  mapTypeControl: false,
-                  center: coords,
-                  navigationControlOptions: {
-                    style: google.maps.NavigationControlStyle.SMALL
-                  },
-                  mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-
-                map = new google.maps.Map(document.getElementById("mapcontainer"), options);
-                
-                var marker = new google.maps.Marker({
-                    position: coords,
-                    animation: google.maps.Animation.DROP,
-                    map: map,
-                    title: "<%= @user.name %>, <%= @user.updated_at %>"
-                });
-                // geolocates user
-                $(function(){
-                  var center = map.getCenter();
-                  // user_id will make user id dynamic to current_user
-                  var user_id = <%= @user.id.to_json %>
-                  // posts lat and lng to server
-                    $.ajax({
-                      url: "/users/current_location/" + user_id,
-                      data: { latitude: center.lat(), longitude: center.lng() },
-                      type: "POST",
-                      dataType: "json",
-                      success: function(data) {
-                        console.log(data);
-                      },
-                      failure: function() {
-                        alert("Unsuccessful");
-                      }
-                    });
-
-                    var friendsCoords = [];
-
-                    <% @user.friends.each do |f| %>
-                      friendsCoords.push(new google.maps.LatLng(<%= f.latitude %>,<%= f.longitude %>));
-                    <% end %>
-
-                    var i, newMarker;
-
-                    for (i=0; i < friendsCoords.length; i++) {
-                      newMarker = new google.maps.Marker({
-                        position: (friendsCoords[i]),
-                        map: map,
-                        draggable: true
-                      });
-
-                      newMarker.setVisible(true);
-                    };
-
-                });
+          map = new google.maps.Map(document.getElementById("mapcontainer"), options);
+          
+          var marker = new google.maps.Marker({
+              position: coords,
+              animation: google.maps.Animation.DROP,
+              map: map,
+              title: "<%= @user.name %>, <%= @user.updated_at %>"
+          });
+          // geolocates user
+          $(function(){
+            var center = map.getCenter();
+            // user_id will make user id dynamic to current_user
+            var user_id = <%= @user.id.to_json %>
+            // posts lat and lng to server
+              $.ajax({
+                url: "/users/current_location/" + user_id,
+                data: { latitude: center.lat(), longitude: center.lng() },
+                type: "POST",
+                dataType: "json",
+                success: function(data) {
+                  console.log(data);
+                },
+                failure: function() {
+                  alert("Unsuccessful");
+                }
               });
-            } 
-            else {
-            // Browser doesn't support Geolocation
-                handleNoGeolocation(false);
-              }
-            }
-           google.maps.event.addDomListener(window, "load", initialize);
 
-          </script>
-        </section>
-        <div class="greeting-div">
-          Welcome <%= current_user.name %>!
-        </div>
-        <%= link_to "Sign Out", logout_path, method: "delete" %>
-        <!-- <footer class="bottom-menu"></footer> -->
-        <nav class="navbar-fixed-bottom" role="navigation"></nav>
-      </div>
-    </section>
-    <a class="exit-off-canvas"></a>
-  </div>
-</div>
+              var friendsCoords = [];
+
+              <% @user.friends.each do |f| %>
+                friendsCoords.push(new google.maps.LatLng(<%= f.latitude %>,<%= f.longitude %>));
+              <% end %>
+
+              var i, newMarker;
+
+              for (i=0; i < friendsCoords.length; i++) {
+                newMarker = new google.maps.Marker({
+                  position: (friendsCoords[i]),
+                  map: map,
+                  draggable: true
+                });
+
+                newMarker.setVisible(true);
+              };
+
+          });
+        });
+      } 
+      else {
+      // Browser doesn't support Geolocation
+          handleNoGeolocation(false);
+        }
+      }
+     google.maps.event.addDomListener(window, "load", initialize);
+
+    </script>
+    <%= link_to "Sign Out", logout_path, method: "delete" %>
+  </section>
+<% end %>
+        

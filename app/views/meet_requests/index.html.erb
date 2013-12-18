@@ -1,41 +1,8 @@
-<% @meet_requests.each do |r| %>
-	<%= r.option %>
-	<%= r.message %>
-	<!-- <input type="button" id="confim_meet_link" value="confirm request"> -->
-	<%= link_to "confirm meet up", confirm_meetup_path(r.id), method: :patch %><br>
+<% content_for :content do %>
+	<% @meet_requests.each do |r| %>
+		<%= r.option %>
+		<%= r.message %>
+		<!-- <input type="button" id="confim_meet_link" value="confirm request"> -->
+		<%= link_to "confirm meet up", confirm_meetup_path(r.id), method: :patch %><br>
+	<% end %>
 <% end %>
-
-<script>
-	// $(function() {
-
-	// 	var meet_request_id = [];
-
-	// 	<% current_user.received_requests.each do |rr| %>
-	// 		meet_request_id.push(<%= rr.id.to_json %>);
-	// 	<% end %>
-
-	// 	meet_request_id.forEach(function(id, i) {
-
- //    	var jsonReq = JSON.stringify({
- //        action: 101,
- //        supported: id 
-	//   	});
-	  
-
-	// 	// var i, newMeetRequest;
-	// 	// @meet_request.id.to_json
-
-	// 		$('#confim_meet_link').on('click', function(event) {
-	// 			event.preventDefault();
-	// 				$.ajax({
-	// 					url: "/meet_requests/confirm_meetup/" + jsonReq,
-	// 					type: "POST",
-	// 					data: { meetup_confirmation: true },
-	// 					success: function(data) {
-	// 						console.log(data);
-	// 					}
-	// 				});
-	// 		});
-	// 	});
-	// })
-</script>

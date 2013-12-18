@@ -3,6 +3,9 @@ class AuthenticationsController < ApplicationController
   before_action :authenticate_user, only: [:destroy]
 
   def new
+    # disables navs so that unauthenticated users can login
+    @disable_top_nav = true
+    @disable_right_nav = true
     # Are they already logged in?
     if current_user # They are!  Can't create them again.
       redirect_to user
@@ -28,7 +31,7 @@ class AuthenticationsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
-    redirect_to authentications_url,
+    redirect_to root_url,
      notice: "You signed out."
   end
   
