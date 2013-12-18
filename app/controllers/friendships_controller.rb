@@ -1,4 +1,5 @@
 class FriendshipsController < ApplicationController
+
   def create
     @friendship = current_user.friendships.build(friend_id: params[:friend_id])
     if @friendship.save
@@ -12,6 +13,7 @@ class FriendshipsController < ApplicationController
 
   def show
     @friendship = current_user.friendships.find(params[:id])
+    @meet_request = current_user.sent_requests.new
   end
 
   def destroy

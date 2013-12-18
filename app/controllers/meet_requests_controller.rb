@@ -5,14 +5,18 @@ class MeetRequestsController < ApplicationController
 	end
 
  	def new
+ 		@friendship = current_user.friendships.find_by(params[:id])
  		@meet_request = current_user.sent_requests.new
+ 		# @friendship = current_user.friendships.find(params[:id])
+ 		# @meet_request.receiver_id = @friendship.friend.id
  	end
 
 	def create
-		@friend = current_user.friends.find_by(params[:friend_id])
-		@meet_request = current_user.sent_requests.new(meet_requests_params)
-		# to make sure we are sending storing to whom the req is being sent
+		@friendship = current_user.friendships.find_by(params[:id])
+		@meet_request = current_user.sent_requests.build(meet_requests_params)
+		# to make sure we are storing to whom the req is being sent
 		@meet_request.receiver_id = @friend.id
+	 	# @friendship.friend = @meet_request.receiver
 
 		if @meet_request.save
 			flash[:notice] = "Request Sent!"
@@ -24,6 +28,7 @@ class MeetRequestsController < ApplicationController
 	end
 
 	def confirm_meetup
+		# @friendship = current_user.friendships.where(params[:friendships_id])
 		@received_request = current_user.received_requests.find_by(params[:receiver_id])
 		if @received_request.update_attributes(meetup_confirmation: true)
 			redirect_to @received_request
@@ -36,7 +41,6 @@ class MeetRequestsController < ApplicationController
 		@received_request = current_user.received_requests.find_by(params[:receiver_id])
 		@friend = @received_request.sender
 
-		
 		# 	flash[:error] = "Meet request not confirmed!"
 		# end
 	end
@@ -44,7 +48,7 @@ class MeetRequestsController < ApplicationController
 	private
 
 	def meet_requests_params
-		params.require(:meet_request).permit(:option, :message)
+		params.require(:meet_request).permit(:option, :message, :receiver_id)
 	end
 
 end

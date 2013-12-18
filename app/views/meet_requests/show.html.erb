@@ -24,47 +24,60 @@
     <!-- all content in main-section gets pushed aside -->
     <section class="main-section">
       <div class="page-container">
+        <input type="text" id="term" value="pizza">
         <section id="map-wrapper">
         <!-- Click the allow button to let the halfgap find your location. -->
         <article></article>
 <script>
-  var map;
 
-  function initialize(){
+  var map,
+      geocoder,
+      markersArray = [],
+      directionsDisplay,
+      polyline=[],
+      businessesArray=[],
+      canvas = "default",
+      proximity = 1600;
+
+  function initialize() {
 
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-      var mapcanvas = document.createElement('div');
-      mapcanvas.id = 'mapcontainer';
+      navigator.geolocation.getCurrentPosition(function(position) 
+      {
+        geocoder = new google.maps.Geocoder;
+        directionsDisplay = new google.maps.DirectionsRenderer;
 
-      document.querySelector('article').appendChild(mapcanvas);
+        var mapcanvas = document.createElement('div');
+        mapcanvas.id = 'mapcontainer';
+        document.querySelector('article').appendChild(mapcanvas);
 
-      var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      
-      var options = {
-        zoom: 8,
-        mapTypeControl: false,
-        center: coords,
-        navigationControlOptions: {
-          style: google.maps.NavigationControlStyle.SMALL
-        },
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
+        var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        
+        var options = {
+          zoom: 8,
+          mapTypeControl: false,
+          center: coords,
+          navigationControlOptions: {
+            style: google.maps.NavigationControlStyle.SMALL
+          },
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
 
-      map = new google.maps.Map(document.getElementById("mapcontainer"), options);
-      
-      var marker = new google.maps.Marker({
-          position: coords,
-          animation: google.maps.Animation.DROP,
-          map: map,
-          title: "<%= current_user.name %>, <%= current_user.updated_at %>"
-      });
-      // stores geolocation of user
-      $(function(){
-        var center = map.getCenter();
-        // user_id will make user id dynamic to current_user
-        var user_id = <%= current_user.id.to_json %>
-        // posts lat and lng to server
+        map = new google.maps.Map(document.getElementById("mapcontainer"), options);
+        
+        var marker = new google.maps.Marker({
+            position: coords,
+            animation: google.maps.Animation.DROP,
+            map: map,
+            title: "<%= current_user.name %>, <%= current_user.updated_at %>"
+        });
+
+        // stores geolocation of user
+        $(function() {
+          var center = map.getCenter();
+          // user_id will make user id dynamic to current_user
+          var user_id = <%= current_user.id.to_json %>
+          // posts lat and lng to server
           $.ajax({
             url: "/users/current_location/" + user_id,
             data: { latitude: center.lat(), longitude: center.lng() },
@@ -77,45 +90,516 @@
               alert("Unsuccessful");
             }
           });
+        
 
-        // finds user's friend's last location
-        var friendLocation = new google.maps.LatLng(<%= @friend.latitude %>,<%= @friend.longitude %>);
+          // finds users friend's last location
+          var friendLocation = new google.maps.LatLng(<%= @friend.latitude %>,<%= @friend.longitude %>);
 
-        var directionsService = new google.maps.DirectionsService();
-        var directionsRequest = {
-            origin: center,
-            destination: friendLocation,
-            travelMode: google.maps.DirectionsTravelMode.DRIVING,
-            unitSystem: google.maps.UnitSystem.METRIC
-        };
+          var directionsService = new google.maps.DirectionsService();
+          var directionsRequest = {
+              origin: center,
+              destination: friendLocation,
+              travelMode: google.maps.DirectionsTravelMode.DRIVING,
+              unitSystem: google.maps.UnitSystem.METRIC
+          };
 
-        directionsService.route(
-          directionsRequest,
-          function(response, status)
-            {
-              if (status == google.maps.DirectionsStatus.OK)
-              {
+          var h;
+
+          directionsService.route(
+            directionsRequest,
+            // function(j, status) {
+            //   if(status == google.maps.DirectionsStatus.OK){
+            //     directionsDisplay.setDirections(j);
+            //     polyline.length = 0;
+            //     h = j.routes[0].legs[0];
+            //     console.log(j.routes);
+            //     polyline.push(h.start_location);
+            //     for(i in h.steps)
+            //       polyline.push(h.steps[i].end_location);
+            //       typeof a === "undefined" ? google.maps.event.addListenerOnce(map,"bounds_changed",function(){fetchBusinesses(h)}) : console.log("YO")
+            //   }
+            //   else 
+            //     console.log()
+            // }
+            function(response, status) {
+              if (status == google.maps.DirectionsStatus.OK) {
                 new google.maps.DirectionsRenderer({
                   map: map,
                   directions: response
                 });
+                midArray = [];                  
+                for(r = 0; r < response.routes.length; ++r)
+                {
+                  rt = response.routes[r];
+                  for(l = 0; l < rt.legs.length; ++l)
+                  {
+                    lg = rt.legs[l];
+                    for(s = 0; s < lg.steps.length; ++s)
+                    {
+                      st = lg.steps[s];
+                      for(p = 0; p < st.path.length; ++p)
+                      {
+                        pth = st.path[p];
+                        midArray.push(pth);
+                        // console.log(pth.lat() + " " + pth.lng());
+                      }
+                    }
+                  }
+                }
+                midpoint = midArray[midArray.length >> 1];
+                console.log(midpoint);
+                console.log(response.routes[0].legs[0].steps[0]);
+                midMarker = new google.maps.Marker({
+                  position: midpoint,
+                  map: map,
+                  draggable: true
+                });
               }
-            
-            else
-              $("#error").append("Unable to retrieve your route<br />");
-          });
+              
+              else
+                $("#error").append("Unable to retrieve your route<br />");
+            }
+          );
         });
-      });
+      })
     } 
     else {
     // Browser doesn't support Geolocation
       handleNoGeolocation(false);
     }
   }
+
+  function fetchBusinesses(a) {
+    // clearContents();
+    var b,c,d;
+
+    if(a.start_location.lat()>a.end_location.lat()) {
+      b=parseFloat(a.start_location.lat())+0.01;
+      d=parseFloat(a.end_location.lat())-0.01
+    }
+    else {
+      b=parseFloat(a.end_location.lat())+0.01;
+      d=parseFloat(a.start_location.lat())-0.01
+    }
+
+    if(a.start_location.lng()<a.end_location.lng()){
+      c=parseFloat(a.start_location.lng())-0.02;
+      a=parseFloat(a.end_location.lng())+0.02
+    }
+    else {
+      c=parseFloat(a.end_location.lng())-0.02;
+      a=parseFloat(a.start_location.lng())+0.02
+    }
+
+    b=constructYelpURL(b,c,d,a);
+    c=document.createElement("script");
+    c.src=b;
+    c.type="text/javascript";
+    document.body.appendChild(c)
+  }
+
+  function constructYelpURL(a,b,c,d) {
+    a="http://api.yelp.com/business_review_search?callback=handleResults&term="+document.getElementById("term").value+"&limit=20&tl_lat="+a+"&tl_long="+b+"&br_lat="+c+"&br_long="+d+"&ywsid=eFRTeu2CfWeBIuSfvmwP-g";
+    return encodeURI(a)
+  }
+
   google.maps.event.addDomListener(window, "load", initialize);
 
+  // ================================================================
+  // ================================================================
+  // ================================================================
+  // ================================================================
+
+
+
+  // function initialize() {
+  //   directionsService=new google.maps.DirectionsService;
+  //   directionsDisplay=new google.maps.DirectionsRenderer;
+  //   directionsDisplay.suppressInfoWindows=true;
+  //   geocoder=new google.maps.Geocoder;
+  //   defaultCenter=new google.maps.LatLng(37.09024,-95.712891);
+  //   defaultZoom=3;
+  //   var a={
+  //     disableDefaultUI:true,
+  //     navigationControl:true,
+  //     navigationControlOptions: {
+  //       style:google.maps.NavigationControlStyle.SMALL
+  //     },
+  //     center:defaultCenter,
+  //     zoom:defaultZoom,
+  //     mapTypeId:google.maps.MapTypeId.ROADMAP
+  //   };
+  //   map = new google.maps.Map(document.getElementById("map_canvas"), a);
+  //   directionsDisplay.setMap(map);
+  //   directionsDisplay.setPanel(document.getElementById("directions_panel"));
+  //   canvas=="mobile"&&window.scrollTo(0,1);
+  //   calcRoute()
+  // }
+
+  // function calcRoute(a) {
+  //   spinner("on");
+  //   if(canvas=="mobile"||canvas=="widget")
+  //     showContents("map");
+  //   setMessage("locations","");
+  //   var b=document.getElementById("start").value,
+  //       c=document.getElementById("end").value,
+  //       d=[];
+
+  //   if(typeof a!=="undefined"){
+  //     canvas!="mobile"&&canvas!="widget"&&showContents("directions");
+  //     var e=formatAddress("address",a-1);
+  //     d.push({location:e,stopover:true});
+  //     var f=document.getElementById("locations_list");
+  //     for(i=0;i<f.childNodes.length;i++){
+  //       var g=parseInt(i)+1;
+  //           g=document.getElementById("listing_"+g);
+  //           g.style.borderRight=i!=a-1?"5px solid #c0c0c0":"5px solid #33cc00"
+  //     }
+  //     g=formatAddress("listing",a-1);
+  //     canvas!="widget"&&setMessage("map",g);
+  //     setMessage("directions",g);
+  //     if(canvas=="default"||canvas=="facebook")setPrintLink(b,c,e)
+  //   }
+  //   else {
+  //     canvas!="mobile"&&canvas!="widget"&&showContents("locations");
+  //     canvas!="widget"&&setMessage("map","");
+  //     setMessage("directions","You have not selected a location.");
+  //     if(canvas=="default"||canvas=="facebook")setPrintLink(b,c);
+  //     businessesArray.length=0;
+  //     map.setCenter(defaultCenter,defaultZoom)
+  //   }
+  //   var h;
+
+  //   directionsService.route({
+  //     origin:b,
+  //     destination:c,
+  //     waypoints:d,
+  //     optimizeWaypoints:true,
+  //     travelMode:google.maps.DirectionsTravelMode.DRIVING,
+  //     unitSystem:google.maps.DirectionsUnitSystem.IMPERIAL
+  //   },
+  //     function(j,k){
+  //       if(k==google.maps.DirectionsStatus.OK){
+  //         directionsDisplay.setDirections(j);
+  //         polyline.length = 0;
+  //         h = j.routes[0].legs[0];
+  //         polyline.push(h.start_location);
+  //         for(i in h.steps)
+  //           polyline.push(h.steps[i].end_location);
+  //           typeof a==="undefined"?google.maps.event.addListenerOnce(map,"bounds_changed",function(){fetchBusinesses(h)}):spinner("off")
+  //       }
+  //       else 
+  //         spinner("off")
+  //     }
+  //     )
+  //   }
+
+  // function fetchBusinesses(a){
+  //   clearContents();
+  //   var b,c,d;
+
+  //   if(a.start_location.lat()>a.end_location.lat()){
+  //     b=parseFloat(a.start_location.lat())+0.01;
+  //     d=parseFloat(a.end_location.lat())-0.01
+  //   }
+  //   else {
+  //     b=parseFloat(a.end_location.lat())+0.01;
+  //     d=parseFloat(a.start_location.lat())-0.01
+  //   }
+
+  //   if(a.start_location.lng()<a.end_location.lng()){
+  //     c=parseFloat(a.start_location.lng())-0.02;
+  //     a=parseFloat(a.end_location.lng())+0.02
+  //   }
+  //   else {
+  //     c=parseFloat(a.end_location.lng())-0.02;
+  //     a=parseFloat(a.start_location.lng())+0.02
+  //   }
+
+  //   b=constructYelpURL(b,c,d,a);
+  //   c=document.createElement("script");
+  //   c.src=b;
+  //   c.type="text/javascript";
+  //   document.body.appendChild(c)
+  // }
+
+  // function constructYelpURL(a,b,c,d) {
+  //   a="http://api.yelp.com/business_review_search?callback=handleResults&term="+document.getElementById("term").value+"&limit=20&tl_lat="+a+"&tl_long="+b+"&br_lat="+c+"&br_long="+d+"&ywsid=eFRTeu2CfWeBIuSfvmwP-g";
+  //   return encodeURI(a)
+  // }
+
+  // function handleResults(a){
+  //   if(a.message.text=="OK") {
+  //     businessesArray=a.businesses;
+  //     trimLocations()
+  //   }
+  // }
+
+  // function trimLocations(){
+  //   var a=[];
+  //   for(i in businessesArray){
+  //     var b = new google.maps.LatLng(businessesArray[i].latitude,businessesArray[i].longitude);
+  //     bdccGeoDistanceToPolyMtrs(polyline,b) <= proximity && a.push(businessesArray[i])}businessesArray=a;
+  //     businessesArray.length>0&&processBusinesses()
+  // }
+
+  // function processBusinesses(){
+  //   document.getElementById("locations_list");
+  //   for(i in businessesArray){
+  //     var a=businessesArray[i],
+  //         b=parseInt(i)+1,
+  //         c="/images/markers/blue/marker"+b+".png",
+  //         d=new google.maps.LatLng(a.latitude,a.longitude);
+  //     a=new google.maps.Marker({
+  //       position:d,map:map,icon:c,zIndex:1,title:a.name
+  //     });
+
+  //     markersArray.push(a);
+
+  //     attachListener(a,b);
+
+  //     var e=formatAddress("listing",i);
+
+  //     a=document.getElementById("locations_list");
+  //     d=document.createElement("div");
+  //     d.id="listing_box_"+b;
+  //     d.className="listing_box";
+  //     var f=document.createElement("div");
+  //     f.id="marker_image_"+b;
+  //     f.className="marker_image";
+  //     f.innerHTML="<img src="+c+" /><br /><img src='/images/plus-icon-20x20.png' />";
+  //     d.appendChild(f);
+  //     c=document.createElement("div");
+  //     c.id="listing_"+b;
+  //     c.className="listing";
+  //     c.innerHTML=e;
+  //     d.appendChild(c);
+  //     c=document.createElement("div");
+  //     c.style.clear="both";
+  //     d.appendChild(c);
+  //     a.appendChild(d);
+  //     attachListener("",b)
+  //   }
+
+  //   spinner("off")
+  // }
+
+  // function formatAddress(a,b){
+  //   var c=businessesArray[b],d,e;
+  //   if(a=="address"){
+  //     e=", ";
+  //     d=""
+  //   }
+  //   else if(a=="listing"){
+  //     e="<br />";
+  //     d=c.name+e;
+  //     d+="<img src='"+c.rating_img_url_small+"' /> "+c.review_count+" reviews (<a href='";
+  //       if(canvas!="mobile")d+=c.url;
+  //       else if(canvas=="mobile")d+=c.mobile_url;
+  //       d+="' target='_blank'>more</a>)"+e
+  //   }
+  //   if(c.address1!="")d+=c.address1+e;
+  //   d+=c.city+", "+c.state+" "+c.zip;
+  //   if(a=="listing"){
+  //     if(c.phone!="")d+=e+c.phone.substr(0,3)+"-"+c.phone.substr(3,3)+"-"+c.phone.substr(6,4);
+  //     d+=e}return d
+  // }
+
+  // function clearContents(){
+  //   if(markersArray){
+  //     for(i in markersArray)markersArray[i].setMap(null);
+  //       markersArray.length=0
+  //   }
+
+  //   for(var a=document.getElementById("locations_list");
+  //     a.hasChildNodes();)
+  //     a.removeChild(a.childNodes[0])
+  // }
+
+  // function attachListener(a,b){
+  //   if(a!="")google.maps.event.addListener(a,"click",function(){
+  //     calcRoute(b)});
+  //   else {
+  //     var c=document.getElementById("marker_image_"+b);
+  //     if(c.addEventListener)c.addEventListener("click", function(){
+  //       calcRoute(b)},
+  //       false);
+  //     else 
+  //       c.attachEvent&&c.attachEvent("onclick",function(){
+  //         calcRoute(b)})
+  //   }
+  // }
+
+  // function showContents(a){
+  //   var b;
+
+  //   if(canvas!="mobile"&&canvas!="widget")
+  //     b=Array("locations","directions","help");
+  //   else if(canvas=="mobile"||canvas=="widget"){
+  //     b=Array("map","locations","directions","help");
+  //     canvas=="mobile"&&window.scrollTo(0,1)
+  //   }
+  //   for(i in b)
+  //     if(b[i]!=a){
+  //       document.getElementById("tab_"+b[i]).className="tab";
+  //       document.getElementById("content_"+b[i]).style.display="none"
+  //     }
+  //     else{document.getElementById("tab_"+b[i]).className="tab_selected";document.getElementById("content_"+b[i]).style.display="block"
+  //     }
+  // }
+  // function setMessage(a,b){
+  //   if(b!="")document.getElementById(a+"_message").style.display="block";
+  //   else document.getElementById(a+"_message").style.display="none";
+  //   document.getElementById(a+"_message").innerHTML=b
+  // }
+
+  // function setPrintLink(a,b,c){
+  //   a=c!==undefined?"saddr="+escape(a)+"&daddr="+escape(c)+"+to:"+escape(b):"saddr="+escape(a)+"&daddr="+escape(b);
+  //   document.getElementById("tab_print").href="http://maps.google.com/maps?pw=2&layer=c&"+a
+  // }
+
+  // function spinner(a){
+  //   if(a=="on"){
+  //     document.getElementById("input_form").style.display="none";
+  //     document.getElementById("spinner").style.display="block"
+  //   }
+  //   else{
+  //     document.getElementById("spinner").style.display="none";
+  //     document.getElementById("input_form").style.display="block"
+  //   }
+  // }
+
+  // function bdccGeo(a,b){
+  //   var c=b*Math.PI/180,
+  //       d=bdccGeoGeocentricLatitude(a*Math.PI/180),
+  //       e=Math.cos(d);
+
+  //   this.x=e*Math.cos(c);
+  //   this.y=e*Math.sin(c);
+  //   this.z=Math.sin(d)
+  // }
+
+  // bdccGeo.prototype=new bdccGeo;
+
+  // function bdccGeoGeocentricLatitude(a){
+  //   var b=1/298.257223563;b=(1-b)*(1-b);
+  //   return Math.atan(Math.tan(a)*b)
+  // }
+
+  // function bdccGeoGeographicLatitude(a){
+  //   var b=1/298.257223563;b=(1-b)*(1-b);return Math.atan(Math.tan(a)/b)
+  // }
+
+  // function bdccGeoGetIntersection(a,b,c,d){
+  //   a=a.crossNormalize(b);
+  //   c=c.crossNormalize(d);
+  //   return a.crossNormalize(c)
+  // }
+
+  // function bdccGeoRadiansToMeters(a){
+  //   return a*6378137
+  // }
+
+  // function bdccGeoMetersToRadians(a){
+  //   return a/6378137
+  // }
+
+  // bdccGeo.prototype.getLatitudeRadians=function(){
+  //   return bdccGeoGeographicLatitude(Math.atan2(this.z,Math.sqrt(this.x*this.x+this.y*this.y)))
+  // };
+
+  // bdccGeo.prototype.getLongitudeRadians=function(){
+  //   return Math.atan2(this.y,this.x)
+  // };
+
+  // bdccGeo.prototype.getLatitude=function(){
+  //   return this.getLatitudeRadians()*180/Math.PI
+  // };
+
+  // bdccGeo.prototype.getLongitude=function(){
+  //   return this.getLongitudeRadians()*180/Math.PI
+  // };
+
+  // bdccGeo.prototype.dot=function(a){
+  //   return this.x*a.x+this.y*a.y+this.z*a.z
+  // };
+
+  // bdccGeo.prototype.crossLength=function(a){
+  //   var b=this.y*a.z-this.z*a.y,c=this.z*a.x-this.x*a.z;
+  //   a=this.x*a.y-this.y*a.x;
+  //   return Math.sqrt(b*b+c*c+a*a)};
+
+  // bdccGeo.prototype.scale=function(a){
+  //   var b=new bdccGeo(0,0);
+  //   b.x=this.x*a;
+  //   b.y=this.y*a;
+  //   b.z=this.z*a;
+  //   return b};
+
+  // bdccGeo.prototype.crossNormalize=function(a){
+  //   var b=this.y*a.z-this.z*a.y,c=this.z*a.x-this.x*a.z;
+  //   a=this.x*a.y-this.y*a.x;
+  //   var d=Math.sqrt(b*b+c*c+a*a),
+  //   e=new bdccGeo(0,0);
+  //   e.x=b/d;
+  //   e.y=c/d;
+  //   e.z=a/d;
+  //   return e
+  // };
+
+  // bdccGeo.prototype.antipode=function(){
+  //   return this.scale(-1)
+  // };
+
+  // bdccGeo.prototype.distance=function(a){
+  //   return Math.atan2(a.crossLength(this),a.dot(this))
+  // };
+
+  // bdccGeo.prototype.distanceToLineSegMtrs=function(a,b){
+  //   var c=a.crossNormalize(b);
+  //   c=bdccGeoGetIntersection(a,b,this,c);
+  //   var d=a.distance(b),e=a.distance(c),f=b.distance(c);
+
+  //   if(d>=e&&d>=f)return bdccGeoRadiansToMeters(this.distance(c));
+  //   else {
+  //     c=c.antipode();
+  //     e=a.distance(c);
+  //     f=b.distance(c)
+  //   }
+  //   return d>=e&&d>=f?bdccGeoRadiansToMeters(this.distance(c)):bdccGeoRadiansToMeters(Math.min(a.distance(this),b.distance(this)))};
+
+  // function bdccGeoDistanceToPolyMtrs(a,b){
+  //   var c=999999999,d,e=new bdccGeo(b.lat(),b.lng());
+  //   for(d=0;d<a.length-1;d++){
+  //     var f=a[d];
+  //     f=new bdccGeo(f.lat(),f.lng());
+  //     var g=a[d+1];
+  //     g=new bdccGeo(g.lat(),g.lng());
+  //     f=e.distanceToLineSegMtrs(f,g);
+  //     if(f<c)c=f
+  //   }
+  //   return c
+  // }
+
+  // function bdccGeoPointAtRangeAndBearing(a,b,c) {
+  //   var d=a.lat()*Math.PI/180;
+  //   a=a.lng()*Math.PI/180;var e=Math.cos(d);
+  //   d=Math.sin(d);
+  //   var f=c*Math.PI/180;
+  //   c=Math.cos(f);
+  //   f=Math.sin(f);
+  //   var g=b/6378137;
+  //   b=Math.sin(g);
+  //   g=Math.cos(g);
+  //   return new GLatLng(Math.asin(d*g+e*b*c)*180/Math.PI,(Math.atan2(b*f,e*g-d*b*c)+a)*180/Math.PI)};
+
+
+
+  
 </script>
         </section>
+
+          
         
         <%= link_to "Sign Out", logout_path, method: "delete" %>
         <!-- <footer class="bottom-menu"></footer> -->
