@@ -15,7 +15,7 @@ class MeetRequestsController < ApplicationController
 		@friendship = current_user.friendships.find_by(params[:id])
 		@meet_request = current_user.sent_requests.build(meet_requests_params)
 		# to make sure we are storing to whom the req is being sent
-		@meet_request.receiver_id = @friend.id
+		@meet_request.receiver_id = @friendship.friend.id
 	 	# @friendship.friend = @meet_request.receiver
 
 		if @meet_request.save

@@ -38,12 +38,14 @@ ActiveRecord::Schema.define(version: 20131215032958) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "option"
-    t.boolean  "meetup_confirmation", default: false
+    t.boolean  "meetup_confirmation"
   end
 
   create_table "users", force: true do |t|
     t.string   "name"
     t.string   "email"
+    t.string   "password"
+    t.string   "confirm_password"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "salt"
