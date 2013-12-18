@@ -1,85 +1,140 @@
 <% content_for :content do %>
   <section id="map-wrapper">
-  <!-- Click the allow button to let the halfgap find your location. -->
-  <article></article>
-    <script>
-      var map;
+    <div id="map"></div>
+    <a href='#' id='geolocate'>Find me</a>
+    <article></article>
+    <script>      
 
       function initialize(){
 
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-          var mapcanvas = document.createElement('div');
-          mapcanvas.id = 'mapcontainer';
-          // mapcanvas.style.height = '480px';
-          // mapcanvas.style.width = '320px';
+        // if (navigator.geolocation) {
+          // navigator.geolocation.getCurrentPosition(function(position) {
+          // var mapcanvas = document.createElement('div');
+          // mapcanvas.id = 'mapcontainer';
+          // document.querySelector('article').appendChild(mapcanvas);
 
-          document.querySelector('article').appendChild(mapcanvas);
+          // var options = {
+          //   zoom: 10,
+          //   // mapTypeControl: false,
+          //   center: [34.0130053, -118.4952649],
+          //   // navigationControlOptions: {
+          //   //   style: google.maps.NavigationControlStyle.SMALL
+          //   // },
+          //   // mapTypeId: google.maps.MapTypeId.ROADMAP
+          // };
 
-          var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          var latlng = L.latLng(50.5, 30.5);
           
-          var options = {
-            zoom: 10,
-            mapTypeControl: false,
-            center: coords,
-            navigationControlOptions: {
-              style: google.maps.NavigationControlStyle.SMALL
-            },
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
+          var map = L.mapbox.map('map', 'randyrlee.gj1k9e25');
+          var geolocate = document.getElementById('geolocate');
 
-          map = new google.maps.Map(document.getElementById("mapcontainer"), options);
-          
-          var marker = new google.maps.Marker({
-              position: coords,
-              animation: google.maps.Animation.DROP,
-              map: map,
-              title: "<%= @user.name %>, <%= @user.updated_at %>"
-          });
-          // geolocates user
-          $(function(){
-            var center = map.getCenter();
-            // user_id will make user id dynamic to current_user
-            var user_id = <%= @user.id.to_json %>
-            // posts lat and lng to server
-              $.ajax({
-                url: "/users/current_location/" + user_id,
-                data: { latitude: center.lat(), longitude: center.lng() },
-                type: "POST",
-                dataType: "json",
-                success: function(data) {
-                  console.log(data);
-                },
-                failure: function() {
-                  alert("Unsuccessful");
-                }
+          // This uses the HTML5 geolocation API, which is available on
+          // most mobile browsers and modern browsers, but not in Internet Explorer
+          //
+          // See this chart of compatibility for details:
+          // http://caniuse.com/#feat=geolocation
+          if (!navigator.geolocation) {
+              geolocate.innerHTML = 'geolocation is not available';
+          } else {
+              geolocate.onclick = function (e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  map.locate();
+              };
+          }
+
+          // Once we've got a position, zoom and center the map
+          // on it, and add a single marker.
+          map.on('locationfound', function(e) {
+              map.fitBounds(e.bounds);
+
+              map.markerLayer.setGeoJSON({
+                  type: "Feature",
+                  geometry: {
+                      type: "Point",
+                      coordinates: [e.latlng.lng, e.latlng.lat]
+                  },
+                  properties: {
+                      'marker-color': '#000',
+                      'marker-symbol': 'star-stroked'
+                  }
               });
 
-              var friendsCoords = [];
-
-              <% @user.friends.each do |f| %>
-                friendsCoords.push(new google.maps.LatLng(<%= f.latitude %>,<%= f.longitude %>));
-              <% end %>
-
-              var i, newMarker;
-
-              for (i=0; i < friendsCoords.length; i++) {
-                newMarker = new google.maps.Marker({
-                  position: (friendsCoords[i]),
-                  map: map,
-                  draggable: true
-                });
-
-                newMarker.setVisible(true);
-              };
-
+              // And hide the geolocation button
+              geolocate.parentNode.removeChild(geolocate);
           });
-        });
-      } 
-      else {
-      // Browser doesn't support Geolocation
-          handleNoGeolocation(false);
-        }
+
+          // If the user chooses not to allow their location
+          // to be shared, display an error message.
+          map.on('locationerror', function() {
+              geolocate.innerHTML = 'position could not be found';
+          });
+
+          // var geolocate = map.locate({
+          //                   setView: true,
+          //                   maxZoom: 10,
+          //                 });
+
+
+          // console.log(geolocate);
+
+          // var circleMarker = L.circleMarker(geolocate).addTo(map);
+
+          // var center = map.getCenter();
+          // var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          
+          
+          
+          // var marker = new google.maps.Marker({
+          //     position: coords,
+          //     animation: google.maps.Animation.DROP,
+          //     map: map,
+          //     title: "<%= @user.name %>, <%= @user.updated_at %>"
+          // });
+          // // geolocates user
+          // $(function(){
+          //   var center = map.getCenter();
+          //   // user_id will make user id dynamic to current_user
+          //   var user_id = <%= @user.id.to_json %>
+          //   // posts lat and lng to server
+          //     $.ajax({
+          //       url: "/users/current_location/" + user_id,
+          //       data: { latitude: center.lat(), longitude: center.lng() },
+          //       type: "POST",
+          //       dataType: "json",
+          //       success: function(data) {
+          //         console.log(data);
+          //       },
+          //       failure: function() {
+          //         alert("Unsuccessful");
+          //       }
+          //     });
+
+          //     var friendsCoords = [];
+
+          //     <% @user.friends.each do |f| %>
+          //       friendsCoords.push(new google.maps.LatLng(<%= f.latitude %>,<%= f.longitude %>));
+          //     <% end %>
+
+          //     var i, newMarker;
+
+          //     for (i=0; i < friendsCoords.length; i++) {
+          //       newMarker = new google.maps.Marker({
+          //         position: (friendsCoords[i]),
+          //         map: map,
+          //         draggable: true
+          //       });
+
+          //       newMarker.setVisible(true);
+          //     };
+
+          // });
+        // });
+      // } 
+      // else {
+      // // Browser doesn't support Geolocation
+      //     handleNoGeolocation(false);
+      //   }
       }
      google.maps.event.addDomListener(window, "load", initialize);
 
