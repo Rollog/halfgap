@@ -7,13 +7,14 @@ Halfgap::Application.routes.draw do
   
   post "users/current_location/:id" => "users#current_location"
   get "users/current_location/:id" => "users#current_location"
+  resources :users 
 
   patch "meet_requests/:id/confirm_meetup" => "meet_requests#confirm_meetup", as: "confirm_meetup"
+  resources :friendships
+    # resources :meet_requests, only: [:new, :create]
   
-  resources :users 
-  resources :friendships do
-    resources :meet_requests
-  end
+  # this resources helps make the meet_requests show page work
+  resources :meet_requests
   resources :authentications
 
   match '/login', to: 'authentications#new', via: 'get'

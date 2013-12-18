@@ -48,36 +48,3 @@
     <a class="exit-off-canvas"></a>
   </div>
 </div>
-
-<script>
-
-  var friendship_id = <%= @friendship.id.to_json %>
-
-  $("#meetUpForm").on('submit', function(event) {
-    event.preventDefault();
-
-    var formData = $(this).serialize();
-
-    $.ajax({
-      url: "/friendships/" + friendship_id + "/meet_requests",
-      type: "POST",
-      data: {option: $('#meet_for').val(), message: $('#or_type_here').text()},
-      success: function (data) {
-        console.log(data);
-        }
-      });
-    }
-  );
-  
-
-  // $(function(){
-  //  $('#meetUpButton').on('click', function(event){
-  //    event.preventDefault();
-  //    $.post('meet_request/new',
-  //    {
-        
-  //    })
-  //  });
-  // });
-  
-</script>
