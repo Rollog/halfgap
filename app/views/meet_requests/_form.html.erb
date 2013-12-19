@@ -5,11 +5,15 @@
   <%= f.submit "Send Request", id: "sbt_btn" %>
 <% end %>
 
+<% audio_tag ""  %>
+
 
 <script>
 	$(document).ready(function(){
 
-		$('input#sbt_btn').hide();
+		$('input#sbt_btn').click(function(){
+			
+		});
 
 		$('text#meet_request_message').on('select', function(e){
 			e.preventDefault();
