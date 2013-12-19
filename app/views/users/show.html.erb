@@ -5,11 +5,13 @@
     <article></article>
     <script>
 
-    $(function(){    
+    $(function(){ 
+
+      var map = L.mapbox.map('map', 'randyrlee.gj1k9e25');   
 
       function initialize(){
 
-        var map = L.mapbox.map('map', 'randyrlee.gj1k9e25');
+        
 
         if (!navigator.geolocation) {
             geolocate.innerHTML = 'geolocation is not available';
@@ -19,7 +21,7 @@
                 e.stopPropagation();
                 map.locate();
             };
-        }
+        };
 
         /// Once we've got a position, zoom and center the map
         // on it, and add a single marker.
@@ -39,16 +41,6 @@
             });
             // debugger;
             console.log(location);
-            // for(e = 0; e < e._geojson.length; ++e)
-            // {
-            //   gj = e._geojson[e];
-            //   for(gm = 0; gm < gj.coordinates.length; ++gm)
-            //   {
-            //     latlng = gj.coordinates[gm];
-            //     geolocateArray.push(latlng);
-            //     console.lsog(latlng.lat() + " " + latlng.lng());
-            //   }
-            // }
 
             var geolocation = location._geojson.geometry.coordinates;
 
@@ -80,47 +72,52 @@
         map.on('locationerror', function() {
             geolocate.innerHTML = 'position could not be found';
         });
-          
-        var friendsCoords = [];
 
-        <% @user.friends.each do |f| %>
-          friendsCoords.push(L.latLng(<%= f.latitude %>,<%= f.longitude %>));
-        <% end %>
-
-        console.log(friendsCoords);
+        findFriends()        
         // debugger;
-
-        var i;
-
-        for (i=0; i < friendsCoords.length; i++) {
-          console.log(friendsCoords[i]['lat']);
-          console.log(friendsCoords[i]['lng']);
-          L.mapbox.markerLayer({
-            // this feature is in the GeoJSON format: see geojson.org
-            // for the full specification
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                // coordinates here are in longitude, latitude order because
-                // x, y is the standard for GeoJSON and many formats
-                coordinates: [friendsCoords[i]['lat'], friendsCoords[i]['lng']]
-            },
-            properties: {
-                title: 'A Single Marker',
-                description: 'Just one of me',
-                // one can customize markers by adding simplestyle properties
-                // http://mapbox.com/developers/simplestyle/
-                'marker-size': 'large',
-                'marker-color': '#f0a'
-            }
-         }).addTo(map); 
-        };
-          // });
-        // });
-      // } 
+        
       }
-     // google.maps.event.addDomListener(window, "load", initialize);
+
+    function findFriends() {
+
+      var friendsCoords = [];
+
+      <% @user.friends.each do |f| %>
+        friendsCoords.push(L.latLng(<%= f.latitude %>,<%= f.longitude %>));
+      <% end %>
+
+      console.log(friendsCoords);
+
+      var i;
+
+      for (i=0; i < friendsCoords.length; i++) {
+        L.marker([friendsCoords[i]['lat'], friendsCoords[i]['lng']]).addTo(map);
+       //  L.mapbox.markerLayer({
+       //    // this feature is in the GeoJSON format: see geojson.org
+       //    // for the full specification
+       //    type: 'Feature',
+       //    geometry: {
+       //        type: 'Point',
+       //        // coordinates here are in longitude, latitude order because
+       //        // x, y is the standard for GeoJSON and many formats
+       //        coordinates: [friendsCoords[i]['lat'], friendsCoords[i]['lng']]
+       //    },
+       //    properties: {
+       //        title: 'A Single Marker',
+       //        description: 'Just one of me',
+       //        // one can customize markers by adding simplestyle properties
+       //        // http://mapbox.com/developers/simplestyle/
+       //        'marker-size': 'large',
+       //        'marker-color': '#f0a'
+       //    }
+       // }).addTo(map); 
+      };
+    } 
+     
+     google.maps.event.addDomListener(window, "load", initialize);
+
     });
+
     </script>
     <%= link_to "Sign Out", logout_path, method: "delete" %>
   </section>

@@ -27,7 +27,7 @@ class MeetRequestsController < ApplicationController
 
 	def confirm_meetup
 		# @friendship = current_user.friendships.where(params[:friendships_id])
-		@received_request = current_user.received_requests.find_by(params[:receiver_id])
+		@received_request = current_user.received_requests.find(params[:id])
 		if @received_request.update_attributes(meetup_confirmation: true)
 			redirect_to @received_request
 		end
