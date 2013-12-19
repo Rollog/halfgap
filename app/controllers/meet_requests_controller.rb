@@ -13,13 +13,6 @@ class MeetRequestsController < ApplicationController
 
 	def create
 		@meet_request = current_user.sent_requests.build(meet_requests_params)
-		@friendship = current_user.friendships.where(friend_id: params[:receiver_id]).first
-		# @friendship.save
-		# binding.pry	
-		
-		# to make sure we are storing to whom the req is being sent
-		# @meet_request.receiver_id = @friendship.friend.id
-	 	# @friendship.friend = @meet_request.receiver
 
 		if @meet_request.save
 			flash[:notice] = "Request Sent!"
