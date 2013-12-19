@@ -5,69 +5,47 @@
     <article></article>
     <script>
 
-      var map,
-          geocoder,
-          markersArray = [],
-          directionsDisplay,
-          polyline=[],
-          businessesArray=[],
-          infowindow;
+    $(function(){ 
+
+      // var map,
+      //     geocoder,
+      //     markersArray = [],
+      //     directionsDisplay,
+      //     polyline=[],
+      //     businessesArray=[],
+      //     infowindow;
+
+      var map = L.mapbox.map('map', 'randyrlee.gj1k9e25');   
 
       function initialize() {
 
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) 
-          {
-            geocoder = new google.maps.Geocoder;
-            directionsDisplay = new google.maps.DirectionsRenderer;
-
-            var mapcanvas = document.createElement('div');
-            mapcanvas.id = 'mapcontainer';
-            document.querySelector('article').appendChild(mapcanvas);
-
-            var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            
-            var options = {
-              zoom: 8,
-              mapTypeControl: false,
-              center: coords,
-              navigationControlOptions: {
-                style: google.maps.NavigationControlStyle.SMALL
-              },
-              mapTypeId: google.maps.MapTypeId.ROADMAP
+        if (!navigator.geolocation) {
+            geolocate.innerHTML = 'geolocation is not available';
+        } else {
+            geolocate.onclick = function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                map.locate();
             };
+        };
 
-            map = new google.maps.Map(document.getElementById("mapcontainer"), options);
+        var user_id = <%= current_user.id.to_json %>
+        // posts lat and lng to server
+        $.ajax({
+          url: "/users/current_location/" + user_id,
+          data: { latitude: geolocation[1], longitude: geolocation[0] },
+          type: "POST",
+          dataType: "json",
+          success: function(data) {
+            console.log(data);
+          },
+          failure: function() {
+            alert("Unsuccessful");
+          }
+        });
             
-            var marker = new google.maps.Marker({
-                position: coords,
-                animation: google.maps.Animation.DROP,
-                map: map,
-                title: "<%= current_user.name %>, <%= current_user.updated_at %>"
-            });
-
-            // stores geolocation of user
-            $(function() {
-              var center = map.getCenter();
-              // user_id will make user id dynamic to current_user
-              var user_id = <%= current_user.id.to_json %>
-              // posts lat and lng to server
-              $.ajax({
-                url: "/users/current_location/" + user_id,
-                data: { latitude: center.lat(), longitude: center.lng() },
-                type: "POST",
-                dataType: "json",
-                success: function(data) {
-                  console.log(data);
-                },
-                failure: function() {
-                  alert("Unsuccessful");
-                }
-              });
-            
-
-              // finds users friend's last location
-              var friendLocation = new google.maps.LatLng(<%= @friend.latitude %>, <%= @friend.longitude %>);
+        // finds users friend's last location
+        var friendLocation = L.latLng(<%= @friend.latitude %>, <%= @friend.longitude %>);
 
               var directionsService = new google.maps.DirectionsService();
               var directionsRequest = {
@@ -133,13 +111,10 @@
                     $("#error").append("Unable to retrieve your route<br />");
                 }
               );
-            });
+            
           })
         } 
-        else {
-        // Browser doesn't support Geolocation
-          handleNoGeolocation(false);
-        }
+
       }
 
       function callback(results, status) {
@@ -165,6 +140,7 @@
 
       google.maps.event.addDomListener(window, "load", initialize);
 
+  });
       // ================================================================
       // ================================================================
       // ================================================================
