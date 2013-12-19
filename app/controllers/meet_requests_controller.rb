@@ -12,19 +12,24 @@ class MeetRequestsController < ApplicationController
  	end
 
 	def create
-		@friendship = current_user.friendships.find_by(params[:id])
 		@meet_request = current_user.sent_requests.build(meet_requests_params)
+		@friendship = current_user.friendships.where(friend_id: params[:receiver_id]).first
+		# @friendship.save
+		# binding.pry	
+		
 		# to make sure we are storing to whom the req is being sent
-		@meet_request.receiver_id = @friendship.friend.id
+		# @meet_request.receiver_id = @friendship.friend.id
 	 	# @friendship.friend = @meet_request.receiver
 
 		if @meet_request.save
 			flash[:notice] = "Request Sent!"
 			redirect_to current_user
+			return
 		else
 			flash[:error] = "Request Failed. Try Again."
 			redirect_to @friendship
 		end
+
 	end
 
 	def confirm_meetup

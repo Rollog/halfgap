@@ -3,141 +3,124 @@
     <div id="map"></div>
     <a href='#' id='geolocate'>Find me</a>
     <article></article>
-    <script>      
+    <script>
+
+    $(function(){    
 
       function initialize(){
 
-        // if (navigator.geolocation) {
-          // navigator.geolocation.getCurrentPosition(function(position) {
-          // var mapcanvas = document.createElement('div');
-          // mapcanvas.id = 'mapcontainer';
-          // document.querySelector('article').appendChild(mapcanvas);
+        var map = L.mapbox.map('map', 'randyrlee.gj1k9e25');
 
-          // var options = {
-          //   zoom: 10,
-          //   // mapTypeControl: false,
-          //   center: [34.0130053, -118.4952649],
-          //   // navigationControlOptions: {
-          //   //   style: google.maps.NavigationControlStyle.SMALL
-          //   // },
-          //   // mapTypeId: google.maps.MapTypeId.ROADMAP
-          // };
+        if (!navigator.geolocation) {
+            geolocate.innerHTML = 'geolocation is not available';
+        } else {
+            geolocate.onclick = function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                map.locate();
+            };
+        }
 
-          var latlng = L.latLng(50.5, 30.5);
+        /// Once we've got a position, zoom and center the map
+        // on it, and add a single marker.
+        map.on('locationfound', function(e) {
+            map.fitBounds(e.bounds);
+
+            var location = map.markerLayer.setGeoJSON({
+                type: "Feature",
+                geometry: {
+                    type: "Point",
+                    coordinates: [e.latlng.lng, e.latlng.lat]
+                },
+                properties: {
+                    'marker-color': '#000',
+                    'marker-symbol': 'star-stroked'
+                }
+            });
+            // debugger;
+            console.log(location);
+            // for(e = 0; e < e._geojson.length; ++e)
+            // {
+            //   gj = e._geojson[e];
+            //   for(gm = 0; gm < gj.coordinates.length; ++gm)
+            //   {
+            //     latlng = gj.coordinates[gm];
+            //     geolocateArray.push(latlng);
+            //     console.lsog(latlng.lat() + " " + latlng.lng());
+            //   }
+            // }
+
+            var geolocation = location._geojson.geometry.coordinates;
+
+
+            console.log(geolocation);
+
+            // var center = map.getCenter();
+            // user_id will make user id dynamic to current_user
+            var user_id = <%= @user.id.to_json %>
+            // posts lat and lng to server
+            $.ajax({
+              url: "/users/current_location/" + user_id,
+              data: { latitude: geolocation[1], longitude: geolocation[0] },
+              type: "POST",
+              dataType: "json",
+              success: function(data) {
+                console.log(data);
+              },
+              failure: function() {
+                alert("Unsuccessful");
+              }
+            });
+            // And hide the geolocation button
+            geolocate.parentNode.removeChild(geolocate);
+        });
+
+        // If the user chooses not to allow their location
+        // to be shared, display an error message.
+        map.on('locationerror', function() {
+            geolocate.innerHTML = 'position could not be found';
+        });
           
-          var map = L.mapbox.map('map', 'randyrlee.gj1k9e25');
-          var geolocate = document.getElementById('geolocate');
+        var friendsCoords = [];
 
-          // This uses the HTML5 geolocation API, which is available on
-          // most mobile browsers and modern browsers, but not in Internet Explorer
-          //
-          // See this chart of compatibility for details:
-          // http://caniuse.com/#feat=geolocation
-          if (!navigator.geolocation) {
-              geolocate.innerHTML = 'geolocation is not available';
-          } else {
-              geolocate.onclick = function (e) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  map.locate();
-              };
-          }
+        <% @user.friends.each do |f| %>
+          friendsCoords.push(L.latLng(<%= f.latitude %>,<%= f.longitude %>));
+        <% end %>
 
-          // Once we've got a position, zoom and center the map
-          // on it, and add a single marker.
-          map.on('locationfound', function(e) {
-              map.fitBounds(e.bounds);
+        console.log(friendsCoords);
+        // debugger;
 
-              map.markerLayer.setGeoJSON({
-                  type: "Feature",
-                  geometry: {
-                      type: "Point",
-                      coordinates: [e.latlng.lng, e.latlng.lat]
-                  },
-                  properties: {
-                      'marker-color': '#000',
-                      'marker-symbol': 'star-stroked'
-                  }
-              });
+        var i;
 
-              // And hide the geolocation button
-              geolocate.parentNode.removeChild(geolocate);
-          });
-
-          // If the user chooses not to allow their location
-          // to be shared, display an error message.
-          map.on('locationerror', function() {
-              geolocate.innerHTML = 'position could not be found';
-          });
-
-          // var geolocate = map.locate({
-          //                   setView: true,
-          //                   maxZoom: 10,
-          //                 });
-
-
-          // console.log(geolocate);
-
-          // var circleMarker = L.circleMarker(geolocate).addTo(map);
-
-          // var center = map.getCenter();
-          // var coords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          
-          
-          
-          // var marker = new google.maps.Marker({
-          //     position: coords,
-          //     animation: google.maps.Animation.DROP,
-          //     map: map,
-          //     title: "<%= @user.name %>, <%= @user.updated_at %>"
-          // });
-          // // geolocates user
-          // $(function(){
-          //   var center = map.getCenter();
-          //   // user_id will make user id dynamic to current_user
-          //   var user_id = <%= @user.id.to_json %>
-          //   // posts lat and lng to server
-          //     $.ajax({
-          //       url: "/users/current_location/" + user_id,
-          //       data: { latitude: center.lat(), longitude: center.lng() },
-          //       type: "POST",
-          //       dataType: "json",
-          //       success: function(data) {
-          //         console.log(data);
-          //       },
-          //       failure: function() {
-          //         alert("Unsuccessful");
-          //       }
-          //     });
-
-          //     var friendsCoords = [];
-
-          //     <% @user.friends.each do |f| %>
-          //       friendsCoords.push(new google.maps.LatLng(<%= f.latitude %>,<%= f.longitude %>));
-          //     <% end %>
-
-          //     var i, newMarker;
-
-          //     for (i=0; i < friendsCoords.length; i++) {
-          //       newMarker = new google.maps.Marker({
-          //         position: (friendsCoords[i]),
-          //         map: map,
-          //         draggable: true
-          //       });
-
-          //       newMarker.setVisible(true);
-          //     };
-
+        for (i=0; i < friendsCoords.length; i++) {
+          console.log(friendsCoords[i]['lat']);
+          console.log(friendsCoords[i]['lng']);
+          L.mapbox.markerLayer({
+            // this feature is in the GeoJSON format: see geojson.org
+            // for the full specification
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                // coordinates here are in longitude, latitude order because
+                // x, y is the standard for GeoJSON and many formats
+                coordinates: [friendsCoords[i]['lat'], friendsCoords[i]['lng']]
+            },
+            properties: {
+                title: 'A Single Marker',
+                description: 'Just one of me',
+                // one can customize markers by adding simplestyle properties
+                // http://mapbox.com/developers/simplestyle/
+                'marker-size': 'large',
+                'marker-color': '#f0a'
+            }
+         }).addTo(map); 
+        };
           // });
         // });
       // } 
-      // else {
-      // // Browser doesn't support Geolocation
-      //     handleNoGeolocation(false);
-      //   }
       }
-     google.maps.event.addDomListener(window, "load", initialize);
-
+     // google.maps.event.addDomListener(window, "load", initialize);
+    });
     </script>
     <%= link_to "Sign Out", logout_path, method: "delete" %>
   </section>

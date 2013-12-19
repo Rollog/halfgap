@@ -48,6 +48,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'database_cleaner'
   gem 'better_errors'
+  gem 'pry'
 end
 
 group :production do

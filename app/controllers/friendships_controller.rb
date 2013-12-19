@@ -14,6 +14,7 @@ class FriendshipsController < ApplicationController
   def show
     @friendship = current_user.friendships.find(params[:id])
     @meet_request = current_user.sent_requests.new
+    @meet_request.receiver_id = @friendship.friend.id
   end
 
   def destroy
