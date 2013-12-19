@@ -2,7 +2,7 @@ class MeetRequestsController < ApplicationController
 	
 	def index
 		@enable_top_nav = true
-		@meet_requests = current_user.received_requests
+		@received_requests = current_user.received_requests
 	end
 
  	def new
@@ -37,7 +37,7 @@ class MeetRequestsController < ApplicationController
 	def show
 		# @friend = current_user.friends.find(params[:id])
 		# once a user confirms a request user is taken to map route
-		@received_request = current_user.received_requests.find_by(params[:receiver_id])
+		@received_request = current_user.received_requests.find(params[:id])
 		@friend = @received_request.sender
 
 		# 	flash[:error] = "Meet request not confirmed!"

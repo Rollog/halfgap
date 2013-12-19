@@ -95,7 +95,10 @@
       var i;
 
       for (i=0; i < friendsCoords.length; i++) {
-        var markerLayer = L.marker([friendsCoords[i]['lat'], friendsCoords[i]['lng']]).addTo(map);
+        var markerLayer = L.marker([friendsCoords[i]['lat'], friendsCoords[i]['lng']],
+          {
+            title: 'Yo Friend'
+          }).addTo(map);
 
         console.log(markerLayer);
       
@@ -117,7 +120,7 @@
     </script>
     <div id="bottom_nav">
       <%= link_to "", meet_requests_path, class: "glyphicon glyphicon-th" %>
-    </div>
+    </div>  
   </section>
 
 <% end %>

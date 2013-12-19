@@ -153,9 +153,9 @@ $maincolor: #333;
 	}
 
 	#mapcontainer {
-	   width: 500px; 
-	   height: 480px; 
-	   border-radius: 100%;
+	   min-width: 320px;
+	   width: 100%; 
+	   height: 420px;
 	}
 
 	.button-bar {
@@ -182,6 +182,15 @@ $maincolor: #333;
 		text-decoration: none;
 		margin-right: 80px;
 		margin-left: 10px;
+	}
+
+	#logged_back_link {
+		// line-height: 20px;
+		margin-top: 10px; 
+		margin-left: 10px; 
+	}
+	#logged_back_link:hover {
+		text-decoration: none;
 	}
 
 	.login_header {
@@ -295,6 +304,78 @@ $maincolor: #333;
 		text-decoration: none;
 	}
 
-	
+	ul {
+		list-style: none;
+	}
+
+	#meet_request_option select {
+   background: transparent;
+   // width: 268px;
+   padding: 5px;
+   font-size: 20px;
+   line-height: 1;
+   border: 0;
+   border-radius: 0;
+   height: 34px;
+   -webkit-appearance: none;
+  }
+
+	#meet_request_option {
+	 // width: 240px;
+	 font-size: 20px;
+   height: 50px;
+   overflow: hidden;
+   background-image: asset-url('new_arrow.png') right #ddd;
+   border: 1px solid #ccc;
+	}
+
+	#meet_request_message {
+		padding: 5px !important;
+		height: 50px;
+		margin-top: 3px;
+		font-size: 20px;
+	}
+
+	input#sbt_btn {
+		margin-top: -10px;
+		width: 100%;
+		background: lemonchiffon;
+		height: 50px;
+		border: none;
+		font-size: 20px;
+		font-weight: bold;
+		line-height: 50px;
+	}
+
+	#friend_name {
+		color: white;
+		font-weight: bolder;
+		// border-bottom: 2px dashed white;
+	}
+
+	#namer {
+		color: white;
+		font-weight: bolder;
+		border-bottom: 2px dashed white;
+	}
+
+	.confirm_mu_link {
+		text-decoration: none;
+		color: #eabd61;
+		font-weight: bold;
+		font-size: 18px;
+	}
+	.confirm_mu_link:hover {
+		text-decoration: none;
+		color: #2ad1af;
+	}
+
+	li {
+		list-style: none;
+	}
+
+	.table {
+		background: rgba(255, 255, 255, .8);
+	}
 
 }

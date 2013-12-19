@@ -2,6 +2,9 @@
   <section class="left tab-bar-section">
     <%#= image_tag "hg.svg", width: 40 %>
   </section>
+
+  <%= render "layouts/backlink" unless @backlink %>
+
 	<section class="right-small">
 	  <a class="right-off-canvas-toggle" ><span class="glyphicon glyphicon-user"></span></a>
 	</section>
