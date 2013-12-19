@@ -6,8 +6,8 @@
   <title>HalfGap</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=AIzaSyD32oFCWtStoFQ9JzajCXErEoGQNMWlIts&sensor=true" %>
-  <%# javascript_include_tag"http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false" %>
+  <%# javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=AIzaSyD32oFCWtStoFQ9JzajCXErEoGQNMWlIts&sensor=true" %>
+  <%= javascript_include_tag"http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false" %>
   <%#= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=true" %>
   <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.css' rel='stylesheet' />
   <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.2/mapbox.js'></script>
@@ -15,23 +15,30 @@
 </head>
 <body>
 
-  <div class="off-canvas-wrap">
-    <div class="inner-wrap">
-      
-      <%= render "layouts/top_nav" unless @disable_top_nav %>
-      <%= render "layouts/right_nav" unless @disable_right_nav %>
+  <%= render "layouts/large_nav" unless @disable_top_nav %>
+  <div class="page-container">
+    <div class="off-canvas-wrap">
+      <div class="inner-wrap">
 
-      <!-- all content in main-section gets pushed aside -->
-      <section class="main-section">
-        <div class="page-container">
-          <%= content_for?(:content) ? yield(:content) : yield %>
-          <%#= link_to "Sign Out", logout_path, method: "delete" %>
-          <!-- <footer class="bottom-menu"></footer> -->
-          <!-- <nav class="navbar-fixed-bottom" role="navigation"></nav> -->
-        </div>
-      </section>
-      <a class="exit-off-canvas"></a>
+        <%= render "layouts/settings_top_nav" if @enable_top_nav %>
+        <%= render "layouts/top_nav" unless @disable_top_nav || @enable_top_nav %>
+
+        <%= render "layouts/right_nav" unless @disable_right_nav || @enable_top_nav %>
+        <%= render "layouts/right_nav" unless @disable_right_nav || @enable_top_nav %>
+
+        <!-- all content in main-section gets pushed aside -->
+        <section class="main-section">
+          
+            <%= content_for?(:content) ? yield(:content) : yield %>
+            <%#= link_to "Sign Out", logout_path, method: "delete" %>
+            <!-- <footer class="bottom-menu"></footer> -->
+            <!-- <nav class="navbar-fixed-bottom" role="navigation"></nav> -->
+          
+        </section>
+        <a class="exit-off-canvas"></a>
+      </div>
     </div>
   </div>
+
 </body>
 </html>

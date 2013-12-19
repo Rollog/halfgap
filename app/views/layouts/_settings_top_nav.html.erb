@@ -1,0 +1,16 @@
+<nav class="tab-bar">
+  <section class="left tab-bar-section">
+    <%#= image_tag "hg.svg", width: 40 %>
+  </section>
+	<section class="right-small">
+	  <a class="right-off-canvas-toggle" ><span class="glyphicon glyphicon-cog"></span></a>
+	</section>
+</nav>
+
+<aside class="right-off-canvas-menu">
+	<ul class="off-canvas-list">
+		<li><label>Settings</label></li>
+		  <li><%= link_to "Find Friends", users_path, method: "get" %></li>
+		  <li><%= link_to "Sign Out", logout_path, method: "delete", id: "signout" %></li>
+	</ul>
+</aside>

@@ -1,8 +1,15 @@
+<div class="login_header_container">
+	<%= link_to "", root_path, id: "back_link",class: "glyphicon glyphicon-chevron-left login_header" %>
+	<!-- <span class="glyphicon glyphicon-chevron-left login_header"></span> -->
+	<h2 class="login_header">LOG IN</h2>
+</div>
+<br>
+
 <%= form_for @user, {url: "/authentications", method: "post"} do |f| %>
 
-		<%= f.text_field :email, placeholder: "Email" %>
-		<%= f.text_field :password, placeholder: "Password" %>
+		<%= f.text_field :email, placeholder: "Email", autofocus: true %>
+		<%= f.password_field :password, placeholder: "Password" %>
 
-		<%= f.submit "Login" %>
+		<%= f.submit "Login", class: "auth_btn" %>
 
 <% end %>
