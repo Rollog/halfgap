@@ -2,6 +2,15 @@
   <section id="map-wrapper">
     <div id="map"></div>
     <a href='#' id='geolocate'>Find me</a>
+    
+<div class="button-bar">
+  <ul class="button-group">
+    <li><%= link_to "Sign Out", logout_path, method: "delete", class:"small button" %></li>
+    <li><a href='#' id='geolocate', class="small button">Find me</a></li>
+    <li><%= link_to "Friends", users_path, method: "get", class:"small button" %></li>
+  </ul>
+  </div>
+
     <article></article>
     <script>
 
