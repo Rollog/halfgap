@@ -5,19 +5,15 @@
   <%= f.submit "Send Request", id: "sbt_btn" %>
 <% end %>
 
-<% audio_tag ""  %>
+<%= audio_tag "halfway3.mp3", id: "meetmemp3"  %>
 
 
 <script>
 	$(document).ready(function(){
 
 		$('input#sbt_btn').click(function(){
-			
-		});
-
-		$('text#meet_request_message').on('select', function(e){
-			e.preventDefault();
-			$('input#sbt_btn').show("slide", { direction: "right" }, "slow");
-		});
+      $('#meetmemp3')[0].play();
+    });
+    
 	});
 </script>
