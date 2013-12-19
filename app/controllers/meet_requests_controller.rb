@@ -1,6 +1,7 @@
 class MeetRequestsController < ApplicationController
 	
 	def index
+		@enable_top_nav = true
 		@meet_requests = current_user.received_requests
 	end
 

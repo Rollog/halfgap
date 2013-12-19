@@ -6,6 +6,10 @@ class UsersController < ApplicationController
 	end
 
 	def new
+<<<<<<< HEAD
+=======
+		@disable_large_nav = true
+>>>>>>> meet_request_ma_nigggggg
 		@disable_top_nav = true
 		@disable_right_nav = true
 		@user = User.new		

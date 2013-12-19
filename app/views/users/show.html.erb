@@ -2,15 +2,8 @@
   
   <section id="map-wrapper">
     <div id="map"></div>
-<!--     <a href='#' id='geolocate'>Find me</a>
- -->    
-<div class="button-bar">
-  <ul class="button-group">
-    <li><%= link_to "Sign Out", logout_path, method: "delete", class:"small button" %></li>
-    <li><a href='#' id='geolocate', class="small button">Find me</a></li>
-    <li><%= link_to "Friends", users_path, method: "get", class:"small button" %></li>
-  </ul>
-  </div>
+    <a href='#' id='geolocate'>Find</a>
+
 
     <article></article>
     <script>
@@ -89,36 +82,31 @@
     function findFriends() {
 
       var friendsCoords = [];
+      var friendsName = [];
 
       <% @user.friends.each do |f| %>
         friendsCoords.push(L.latLng(<%= f.latitude %>,<%= f.longitude %>));
+        // friendsName.push(<%= f.name.capitalize.to_s %>);
       <% end %>
 
       console.log(friendsCoords);
+      console.log(friendsName);
 
       var i;
 
       for (i=0; i < friendsCoords.length; i++) {
-        L.marker([friendsCoords[i]['lat'], friendsCoords[i]['lng']]).addTo(map);
-       //  L.mapbox.markerLayer({
-       //    // this feature is in the GeoJSON format: see geojson.org
-       //    // for the full specification
-       //    type: 'Feature',
-       //    geometry: {
-       //        type: 'Point',
-       //        // coordinates here are in longitude, latitude order because
-       //        // x, y is the standard for GeoJSON and many formats
-       //        coordinates: [friendsCoords[i]['lat'], friendsCoords[i]['lng']]
-       //    },
-       //    properties: {
-       //        title: 'A Single Marker',
-       //        description: 'Just one of me',
-       //        // one can customize markers by adding simplestyle properties
-       //        // http://mapbox.com/developers/simplestyle/
-       //        'marker-size': 'large',
-       //        'marker-color': '#f0a'
-       //    }
-       // }).addTo(map); 
+        var markerLayer = L.marker([friendsCoords[i]['lat'], friendsCoords[i]['lng']]).addTo(map);
+
+        console.log(markerLayer);
+      
+        markerLayer.eachLayer(function(layer) {
+          // here you call `bindPopup` with a string of HTML you create - the feature
+          // properties declared above are available under `layer.feature.properties`
+
+          var content = '<h1>size: ' + layer.feature.properties.size + '<\/h1>' +
+              '<h2>population: ' + layer.feature.properties.population + '<\/h2>';
+          layer.bindPopup(content);
+        });
       };
     } 
      
@@ -127,6 +115,10 @@
     });
 
     </script>
+    <div id="bottom_nav">
+      <%= link_to "", meet_requests_path, class: "glyphicon glyphicon-th" %>
+    </div>
   </section>
+
 <% end %>
         

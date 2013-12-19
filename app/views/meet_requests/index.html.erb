@@ -1,8 +1,10 @@
 <% content_for :content do %>
-	<% @meet_requests.each do |r| %>
-		<%= r.option %>
-		<%= r.message %>
-		<!-- <input type="button" id="confim_meet_link" value="confirm request"> -->
-		<%= link_to "confirm meet up", confirm_meetup_path(r.id), method: :patch %><br>
-	<% end %>
+	<div id="mr_index">
+		<% @meet_requests.each do |r| %>
+			<%= r.option %>
+			<%= r.message %>
+			<!-- <input type="button" id="confim_meet_link" value="confirm request"> -->
+			<%= link_to "confirm", confirm_meetup_path(r.id), method: :patch %><br>
+		<% end %>
+	</div>
 <% end %>
