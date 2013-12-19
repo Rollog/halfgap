@@ -1,8 +1,9 @@
 <% content_for :content do %>
+  
   <section id="map-wrapper">
     <div id="map"></div>
-    <a href='#' id='geolocate'>Find me</a>
-    
+<!--     <a href='#' id='geolocate'>Find me</a>
+ -->    
 <div class="button-bar">
   <ul class="button-group">
     <li><%= link_to "Sign Out", logout_path, method: "delete", class:"small button" %></li>
@@ -126,7 +127,6 @@
     });
 
     </script>
-    <%= link_to "Sign Out", logout_path, method: "delete" %>
   </section>
 <% end %>
         
