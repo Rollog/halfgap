@@ -8,8 +8,6 @@
           geocoder,
           markersArray = [],
           directionsDisplay,
-          polyline=[],
-          businessesArray=[],
           infowindow;
 
       function initialize() {
@@ -145,10 +143,10 @@
                     console.log(midpoint);
                     console.log(response.routes[0].legs[0].steps[0]);
                     
-                    var midMarker = new google.maps.Marker({
-                      position: midpoint,
-                      map: map,
-                    });
+                    // var midMarker = new google.maps.Marker({
+                    //   position: midpoint,
+                    //   map: map,
+                    // });
 
                     var request = {
                       location: midpoint,
@@ -184,11 +182,20 @@
         }
       }
 
+      var placeMarkers = new google.maps.MarkerImage(
+        '/assets/orange_marker.png',
+        null, // size
+        null, // origin
+        new google.maps.Point( 10, 28 ), // anchor (move to center of marker)
+        new google.maps.Size( 20, 28 ) // scaled size (required for Retina display icon)
+      );
+
       function createMarker(place) {
         var placeLoc = place.geometry.location;
         var marker = new google.maps.Marker({
           map: map,
-          position: place.geometry.location
+          position: place.geometry.location,
+          icon: placeMarkers
         });
 
         google.maps.event.addListener(marker, 'click', function() {
