@@ -1,15 +1,13 @@
 <div class="page_container">
 	<div class="home_container">
 		<div id="logo_container">
-			<%= image_tag "halfgap_v5.png", id: "main_logo" %>
+			<%= image_tag "halfgap_logov3.svg", id: "main_logo" %>
 		</div>
-		
-		<div id="ball">
+
+		<div>
+			<%= image_tag "clouds.svg", id: "clouds" %>
 		</div>
-			
-				<!-- <h4 id="tagline">"Can you meet me halfway..?"</h4>
-				<h4>-Fergie</h4> -->
-			
+					
 			<div class="auth_container">
 				<div id="login2" class="home_links"><%= link_to "LOG IN", new_authentication_path, id: "login" %></div>
 				<div id="signup" class="home_links"><%= link_to "SIGN UP", new_user_path, id: "signup" %></div>
