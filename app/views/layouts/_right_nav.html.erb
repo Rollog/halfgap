@@ -1,6 +1,6 @@
 <aside class="right-off-canvas-menu">
 	<ul class="off-canvas-list">
-		<li><label>Friends</label></li>
+		<li><label>Half Gap w/ Friends</label></li>
 		<% current_user.friendships.each do |f| %>
 		  <li>
 		    <%= link_to f.friend.name.upcase, friendship_path(f.id) %>

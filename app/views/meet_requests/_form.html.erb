@@ -1,6 +1,6 @@
 <%= form_for [@friendship, @meet_request], url: friendship_meet_requests_path(@friendship) do |f| %>
   <%= f.select(:option, options_for_select([['Meet For:', 1], ['Coffee', 2], ['Alcohol', 3], ['Bars', 4], ['Food', 5]], disabled: true)) %>
-  <%= f.text_field :message, placeholder: "message", id: "meet_request_message" %>
+  <%= f.text_field :message, placeholder: "Or choose a keyword", id: "meet_request_message" %>
   <%= f.hidden_field :receiver_id %>
   <%= f.submit "Send Request", id: "sbt_btn" %>
 <% end %>
