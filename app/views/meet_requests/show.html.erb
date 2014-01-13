@@ -100,6 +100,7 @@
               // finds users friend's last location
               var friendLocation = new google.maps.LatLng(<%= @friend.latitude %>, <%= @friend.longitude %>);
 
+              // routes from user's to friend's location
               var directionsService = new google.maps.DirectionsService();
               var directionsRequest = {
                   origin: center,
@@ -147,7 +148,6 @@
                     var midMarker = new google.maps.Marker({
                       position: midpoint,
                       map: map,
-                      draggable: true
                     });
 
                     var request = {

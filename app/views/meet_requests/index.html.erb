@@ -1,8 +1,11 @@
 <% content_for :content do %>
 	<table class="table">
+		<th><strong>FROM:</strong></th>
+		<th><strong>FOR:</strong></th>
 		<% @received_requests.each do |r| %>
 		<tr>
-			<td><%= r.message %></td>
+			<td id="sender_name"><%= r.sender.name %></td>
+			<td>"<%= r.message %>"</td>
 			<td><%= link_to "confirm", confirm_meetup_path(r.id), method: :patch, class: "confirm_mu_link" %></td>
 			</tr>
 		<% end %>
