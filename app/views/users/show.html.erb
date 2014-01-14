@@ -118,9 +118,11 @@
               });
 
               var friendsCoords = [];
+              var friendsInfo = [];
 
               <% @user.friends.each do |f| %>
                 friendsCoords.push(new google.maps.LatLng(<%= f.latitude %>,<%= f.longitude %>));
+                friendsInfo.push(<%=  %>)
               <% end %>
 
               var i, newMarker;
@@ -137,7 +139,7 @@
                 newMarker = new google.maps.Marker({
                   position: (friendsCoords[i]),
                   map: map,
-                  icon: friendsMarkers
+                  icon: friendsMarkers,
                 });
 
                 newMarker.setVisible(true);
