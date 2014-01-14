@@ -16,7 +16,12 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		if @user.save
-			redirect_to @user
+			# redirect to users home page if new account is created
+			user = @user
+	    if user.authenticate(params[:user][:password])
+	      session[:user_id] = user.id
+	      redirect_to user
+	    end
 		end
 	end
 
